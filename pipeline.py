@@ -755,6 +755,7 @@ class TaskManager:
                             "label": "song",
                             "song_title": ch["title"],
                             "_chapter_note": ch.get("description_note", ""),
+                            "is_provisional": False,
                         }
                     )
                 self.emit_log(
@@ -764,8 +765,8 @@ class TaskManager:
                     progress="Extracting 1st song...",
                 )
             else:
-                # 설명란에 타임스탬프가 없는 경우 기본 6분 단위 초기 슬롯 구성 후 병렬 세분화
-                step_win = 360.0
+                # 설명란에 타임스탬프가 없는 경우 5분 단위 초기 슬롯 구성 후 백그라운드 전수 세분화
+                step_win = 300.0
                 cur = 0.0
                 idx = 1
                 while cur < total_duration:
@@ -778,6 +779,7 @@ class TaskManager:
                             "label": "song",
                             "song_title": f"Live Section {idx}",
                             "_chapter_note": "",
+                            "is_provisional": True,
                         }
                     )
                     cur = nxt
@@ -824,7 +826,7 @@ class TaskManager:
                 first_song_end = first_win_end
 
             # 만약 첫 번째 챕터가 긴 섹션(예: 25분짜리 Section 1)이었다면, 첫 번째 곡 세그먼트를 앞에 분리
-            if first_seg["end"] - first_song_end > 60.0:
+            if first_seg["end"] - first_song_end > 45.0:
                 rem_start = round(first_song_end, 1)
                 rem_end = first_seg["end"]
                 orig_title = first_seg.get("song_title") or "Section 1"
@@ -833,6 +835,7 @@ class TaskManager:
                 first_seg["end"] = round(first_song_end, 1)
                 first_seg["label"] = "song"
                 first_seg["song_title"] = first_song_title
+                first_seg["is_provisional"] = False
                 segments_list.insert(
                     1,
                     {
@@ -843,10 +846,12 @@ class TaskManager:
                         "song_title": f"{orig_title} (이어서)",
                         "_chapter_note": orig_note,
                         "_needs_subseg": True,
+                        "is_provisional": True,
                     },
                 )
             else:
                 first_seg["song_title"] = first_song_title
+                first_seg["is_provisional"] = False
 
             # ID 재정렬
             for idx, s in enumerate(segments_list):
@@ -929,20 +934,25 @@ class TaskManager:
             if task.get("cancelled"):
                 return
 
-            # 3-1. 긴 섹션(8분 이상)이 있다면 백그라운드에서 세부 곡/멘트 단위로 분할하여 세트리스트 실시간 업데이트
+            # 3-1. 긴 섹션(4분 이상) 또는 임시 섹션(Live Section N)이 있다면 백그라운드에서 세부 곡/멘트 단위로 전수 분할하여 세트리스트 실시간 업데이트
             refined_segments: List[Dict[str, Any]] = [segments_list[0]]
             for seg in segments_list[1:]:
                 if task.get("cancelled"):
                     return
                 dur = seg["end"] - seg["start"]
-                if dur > 420.0 or seg.get("_needs_subseg"):
-                    # 10분 단위 윈도우로 나누어 Flash 클립 분할 호출
+                is_provisional = (
+                    seg.get("is_provisional", False)
+                    or "Live Section" in str(seg.get("song_title", ""))
+                    or bool(seg.get("_needs_subseg"))
+                )
+                if dur > 240.0 or is_provisional:
+                    # 5~8분 단위 윈도우로 나누어 Flash 클립 분할 호출
                     win_s = seg["start"]
                     sub_found: List[Dict[str, Any]] = []
                     while win_s < seg["end"]:
                         if task.get("cancelled"):
                             return
-                        win_e = min(seg["end"], win_s + 600.0)
+                        win_e = min(seg["end"], win_s + 480.0)
                         try:
                             async with self.semaphore:
                                 sub_items = await self._subsegment_chapter_window(
@@ -987,6 +997,25 @@ class TaskManager:
                         refined_segments.append(seg)
                 else:
                     refined_segments.append(seg)
+
+            # 인접한 동일 제목 세그먼트 자동 병합 (윈도우 경계에서 분할된 곡 연결)
+            merged_segments: List[Dict[str, Any]] = []
+            for s in refined_segments:
+                if not merged_segments:
+                    merged_segments.append(s)
+                    continue
+                prev = merged_segments[-1]
+                if (
+                    prev.get("label") == "song"
+                    and s.get("label") == "song"
+                    and prev.get("song_title")
+                    and prev.get("song_title") == s.get("song_title")
+                    and abs(s["start"] - prev["end"]) <= 10.0
+                ):
+                    prev["end"] = max(prev["end"], s["end"])
+                else:
+                    merged_segments.append(s)
+            refined_segments = merged_segments
 
             # 세그먼트 번호 재부여 및 실시간 세트리스트 갱신 반영
             refined_segments.sort(key=lambda x: x["start"])

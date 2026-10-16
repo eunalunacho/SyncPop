@@ -18,8 +18,7 @@
 5. [🛠️ Tech Stack](#️-tech-stack)
 6. [🚀 Quick Start (Local & Docker)](#-quick-start-local--docker)
 7. [📂 Project Structure](#-project-structure)
-8. [📖 Detailed Documentation](#-detailed-documentation)
-9. [🗺️ Roadmap](#️-roadmap)
+8. [🗺️ Roadmap](#️-roadmap)
 
 ---
 
@@ -134,12 +133,6 @@ docker run -p 8080:8080 --env-file .env syncpop-live
 
 ```
 SyncPop/
-├── docs/                 # Detailed documentation & PRD/Architecture specs
-│   ├── PRD.md            # Product Requirements Document
-│   ├── DESIGN.md         # Technical Design & System Architecture
-│   ├── PIPELINE.md       # 3-Stage Pipeline & Prompt Specifications
-│   ├── RUNBOOK.md        # Local & Cloud Run Deployment Runbook
-│   └── SUBMISSION.md     # Hackathon Submission Details & Video Script
 ├── static/               # Frontend Assets (Vanilla JS / CSS SPA)
 │   └── index.html        # Interactive Concert Player Single-Page App
 ├── cache/                # Pre-processed demo cache files
@@ -152,16 +145,6 @@ SyncPop/
 ├── .env.example          # Sample Environment Configuration
 └── README.md             # Project Overview & Quickstart Guide
 ```
-
----
-
-## 📖 Detailed Documentation
-
-- [Product Requirements (PRD)](./docs/PRD.md)
-- [System Design & Architecture](./docs/DESIGN.md)
-- [Pipeline & Prompts Specification](./docs/PIPELINE.md)
-- [Deployment Runbook](./docs/RUNBOOK.md)
-- [Hackathon Submission Guide](./docs/SUBMISSION.md)
 
 ---
 

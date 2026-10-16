@@ -19,3 +19,6 @@ cache/*.tmp
 *.log
 .DS_Store
 Thumbs.db
+
+# Documentation (Internal / Local)
+docs/

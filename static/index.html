@@ -1942,7 +1942,7 @@
         badge.textContent = `🎵 ${seg.song_title || (songObj && songObj.title) || "Song"} · ${formatTime(seg.start)} ~ ${formatTime(seg.end)}`;
         block.appendChild(badge);
 
-        if (!songObj || !songObj.lines || songObj.lines.length === 0) {
+        if (!songObj) {
           const empty = document.createElement("div");
           empty.className = "lyric-line";
           empty.dataset.timelineUid = `song_pending_${seg.id}`;
@@ -1957,6 +1957,25 @@
               </div>
             </div>
             <div class="lyric-ko" style="color: var(--text-secondary);">⏳ 백그라운드 AI가 '${seg.song_title || "이 곡"}'의 라이브 가사와 맥락 번역을 추출하고 있습니다 (완료 시 자동 표시)...</div>
+          `;
+          empty.addEventListener("click", () => seekToTime(seg.start));
+          block.appendChild(empty);
+        } else if (!songObj.lines || songObj.lines.length === 0) {
+          const empty = document.createElement("div");
+          empty.className = "lyric-line";
+          empty.dataset.timelineUid = `song_inst_${seg.id}`;
+          empty.dataset.segId = seg.id;
+          empty.dataset.start = seg.start;
+          empty.dataset.end = seg.end;
+          empty.innerHTML = `
+            <div class="lyric-meta-row">
+              <span class="lyric-timestamp">${formatTime(seg.start)} ~ ${formatTime(seg.end)}</span>
+              <div class="badges-wrap">
+                <span class="singer-tag artist" style="background: rgba(139, 92, 246, 0.2); border-color: rgba(139, 92, 246, 0.5); color: #C084FC;">🎹 Instrumental</span>
+              </div>
+            </div>
+            <div class="lyric-ko" style="color: var(--text-secondary);">🎹 인스트루멘탈 / 오프닝 연주 구간입니다. (가사 없는 연주 트랙)</div>
+            <div class="lyric-en" style="color: rgba(255, 255, 255, 0.5);">Instrumental / Intro Performance Track</div>
           `;
           empty.addEventListener("click", () => seekToTime(seg.start));
           block.appendChild(empty);
