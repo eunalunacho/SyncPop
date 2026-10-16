@@ -1,0 +1,930 @@
+{
+  "video": {
+    "id": "ay1wB-2npMQ",
+    "title": "TWICE Full Performance-Lollapalooza Chicago 2025",
+    "duration": 5284.0
+  },
+  "segments": [
+    {
+      "id": "seg_001",
+      "start": 0.0,
+      "end": 81.0,
+      "label": "song",
+      "song_title": "OPENING VCR"
+    },
+    {
+      "id": "seg_002",
+      "start": 81.0,
+      "end": 333.0,
+      "label": "song",
+      "song_title": "The Feels"
+    },
+    {
+      "id": "seg_003",
+      "start": 333.0,
+      "end": 619.0,
+      "label": "song",
+      "song_title": "MORE & MORE"
+    },
+    {
+      "id": "seg_004",
+      "start": 619.0,
+      "end": 837.0,
+      "label": "song",
+      "song_title": "Dance The Night Away"
+    },
+    {
+      "id": "seg_005",
+      "start": 837.0,
+      "end": 1046.0,
+      "label": "song",
+      "song_title": "What is Love?"
+    },
+    {
+      "id": "seg_006",
+      "start": 1046.0,
+      "end": 1249.0,
+      "label": "song",
+      "song_title": "Talk that Talk"
+    },
+    {
+      "id": "seg_007",
+      "start": 1249.0,
+      "end": 1462.0,
+      "label": "song",
+      "song_title": "Alcohol-free"
+    },
+    {
+      "id": "seg_008",
+      "start": 1462.0,
+      "end": 1797.0,
+      "label": "song",
+      "song_title": "I GOT YOU"
+    },
+    {
+      "id": "seg_009",
+      "start": 1797.0,
+      "end": 1983.0,
+      "label": "song",
+      "song_title": "ICON"
+    },
+    {
+      "id": "seg_010",
+      "start": 1983.0,
+      "end": 2208.0,
+      "label": "song",
+      "song_title": "I CAN'T STOP ME"
+    },
+    {
+      "id": "seg_011",
+      "start": 2208.0,
+      "end": 2413.0,
+      "label": "song",
+      "song_title": "CRY FOR ME"
+    },
+    {
+      "id": "seg_012",
+      "start": 2413.0,
+      "end": 2617.0,
+      "label": "song",
+      "song_title": "RIGHT HAND GIRL"
+    },
+    {
+      "id": "seg_013",
+      "start": 2617.0,
+      "end": 2732.0,
+      "label": "song",
+      "song_title": "TAKEDOWN"
+    },
+    {
+      "id": "seg_014",
+      "start": 2732.0,
+      "end": 2949.0,
+      "label": "song",
+      "song_title": "FANCY"
+    },
+    {
+      "id": "seg_015",
+      "start": 2949.0,
+      "end": 3291.0,
+      "label": "song",
+      "song_title": "Queen of Hearts"
+    },
+    {
+      "id": "seg_016",
+      "start": 3291.0,
+      "end": 3485.0,
+      "label": "song",
+      "song_title": "MOONLIGHT SUNRISE"
+    },
+    {
+      "id": "seg_017",
+      "start": 3485.0,
+      "end": 3495.0,
+      "label": "talk",
+      "song_title": null
+    },
+    {
+      "id": "seg_018",
+      "start": 3495.0,
+      "end": 3704.0,
+      "label": "song",
+      "song_title": "ONE SPARK"
+    },
+    {
+      "id": "seg_019",
+      "start": 3704.0,
+      "end": 3712.0,
+      "label": "talk",
+      "song_title": null
+    },
+    {
+      "id": "seg_020",
+      "start": 4040.0,
+      "end": 4210.0,
+      "label": "song",
+      "song_title": "Strategy"
+    },
+    {
+      "id": "seg_021",
+      "start": 4210.0,
+      "end": 4495.0,
+      "label": "song",
+      "song_title": "THIS IS FOR"
+    },
+    {
+      "id": "seg_022",
+      "start": 4495.0,
+      "end": 4704.0,
+      "label": "song",
+      "song_title": "Feel Special"
+    },
+    {
+      "id": "seg_023",
+      "start": 4704.0,
+      "end": 4818.0,
+      "label": "talk",
+      "song_title": null
+    },
+    {
+      "id": "seg_024",
+      "start": 4946.0,
+      "end": 5284.0,
+      "label": "song",
+      "song_title": "ENCORE"
+    }
+  ],
+  "talks": [],
+  "songs": [
+    {
+      "segment_id": "seg_001",
+      "title": "OPENING VCR",
+      "context_injected": "",
+      "lines": []
+    },
+    {
+      "segment_id": "seg_002",
+      "title": "The Feels",
+      "lines": [
+        {
+          "id": "line_01",
+          "start": 81.3,
+          "end": 84.8,
+          "original": "You have stolen my heart, oh, yeah",
+          "romanized": "You have stolen my heart, oh, yeah",
+          "translation_en": "You have stolen my heart, oh, yeah",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 81.3,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_02",
+          "start": 89.8,
+          "end": 94.7,
+          "original": "Never let it go, oh-oh, no, never let it go, oh-oh-oh",
+          "romanized": "Never let it go, oh-oh, no, never let it go, oh-oh-oh",
+          "translation_en": "Never let it go, oh-oh, no, never let it go, oh-oh-oh",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 89.8,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_03",
+          "start": 98.2,
+          "end": 101.6,
+          "original": "Lightning straight to my heart, oh, yeah",
+          "romanized": "Lightning straight to my heart, oh, yeah",
+          "translation_en": "Lightning straight to my heart, oh, yeah",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 98.2,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_04",
+          "start": 101.9,
+          "end": 106.3,
+          "original": "I got all the feels for sure, yeah, I got all the feels for ya",
+          "romanized": "I got all the feels for sure, yeah, I got all the feels for ya",
+          "translation_en": "I got all the feels for sure, yeah, I got all the feels for ya",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 101.9,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_05",
+          "start": 109.8,
+          "end": 112.5,
+          "original": "What's up, Seattle!",
+          "romanized": "What's up, Seattle!",
+          "translation_en": "What's up, Seattle!",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 109.8,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_06",
+          "start": 116.1,
+          "end": 118.8,
+          "original": "You have stolen my heart, oh, yeah",
+          "romanized": "You have stolen my heart, oh, yeah",
+          "translation_en": "You have stolen my heart, oh, yeah",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 116.1,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_07",
+          "start": 119.1,
+          "end": 123.6,
+          "original": "Never let it go, oh-oh, no, never let it go, oh-oh-oh",
+          "romanized": "Never let it go, oh-oh, no, never let it go, oh-oh-oh",
+          "translation_en": "Never let it go, oh-oh, no, never let it go, oh-oh-oh",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 119.1,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_08",
+          "start": 123.9,
+          "end": 127.3,
+          "original": "Lightning straight to my heart, oh, yeah",
+          "romanized": "Lightning straight to my heart, oh, yeah",
+          "translation_en": "Lightning straight to my heart, oh, yeah",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 123.9,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_09",
+          "start": 127.6,
+          "end": 131.6,
+          "original": "I got all the feels for sure, yeah, I got all the feels for ya",
+          "romanized": "I got all the feels for sure, yeah, I got all the feels for ya",
+          "translation_en": "I got all the feels for sure, yeah, I got all the feels for ya",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 127.6,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_10",
+          "start": 131.9,
+          "end": 135.2,
+          "original": "Boy, I, boy, I, boy, I know, I know I get the feels",
+          "romanized": "Boy, I, boy, I, boy, I know, I know I get the feels",
+          "translation_en": "Boy, I, boy, I, boy, I know, I know I get the feels",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 131.9,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_11",
+          "start": 135.5,
+          "end": 139.7,
+          "original": "Boy, I, boy, I, boy, I know, I know you feel it too",
+          "romanized": "Boy, I, boy, I, boy, I know, I know you feel it too",
+          "translation_en": "Boy, I, boy, I, boy, I know, I know you feel it too",
+          "singer": "artist",
+          "singalong_request": true,
+          "start_display": 135.5,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_12",
+          "start": 140.2,
+          "end": 142.9,
+          "original": "Who's ready for TWICE?",
+          "romanized": "Who's ready for TWICE?",
+          "translation_en": "Who's ready for TWICE?",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 140.2,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_13",
+          "start": 144.2,
+          "end": 149.0,
+          "original": "Sway, I wanna let it go, but I know every time you move got me frozen",
+          "romanized": "Sway, I wanna let it go, but I know every time you move got me frozen",
+          "translation_en": "Sway, I wanna let it go, but I know every time you move got me frozen",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 144.2,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_14",
+          "start": 149.1,
+          "end": 151.7,
+          "original": "I get so shy, it's obvious",
+          "romanized": "I get so shy, it's obvious",
+          "translation_en": "I get so shy, it's obvious",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 149.1,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_15",
+          "start": 151.9,
+          "end": 157.0,
+          "original": "Catching feels like butterflies in my tummy, make my heart beat blast, ooh",
+          "romanized": "Catching feels like butterflies in my tummy, make my heart beat blast, ooh",
+          "translation_en": "Catching feels like butterflies in my tummy, make my heart beat blast, ooh",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 151.9,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_16",
+          "start": 157.2,
+          "end": 162.8,
+          "original": "Shoot, I'm ready, aim and fire, baby, I",
+          "romanized": "Shoot, I'm ready, aim and fire, baby, I",
+          "translation_en": "Shoot, I'm ready, aim and fire, baby, I",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 157.2,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_17",
+          "start": 163.5,
+          "end": 170.8,
+          "original": "Feel like Cupid's alive, alive-ive-ive tonight, catch my eye",
+          "romanized": "Feel like Cupid's alive, alive-ive-ive tonight, catch my eye",
+          "translation_en": "Feel like Cupid's alive, alive-ive-ive tonight, catch my eye",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 163.5,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_18",
+          "start": 171.1,
+          "end": 175.7,
+          "original": "Touch with a smile, just let it happen, yeah, cause I'm good from head to toe",
+          "romanized": "Touch with a smile, just let it happen, yeah, cause I'm good from head to toe",
+          "translation_en": "Touch with a smile, just let it happen, yeah, cause I'm good from head to toe",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 171.1,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_19",
+          "start": 175.8,
+          "end": 182.8,
+          "original": "I know love it is such a funny thing, a mystery well, gotta get to know you more",
+          "romanized": "I know love it is such a funny thing, a mystery well, gotta get to know you more",
+          "translation_en": "I know love it is such a funny thing, a mystery well, gotta get to know you more",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 175.8,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_20",
+          "start": 182.9,
+          "end": 187.3,
+          "original": "'Cause I, I can feel a real connection, a supernatural attraction, ah",
+          "romanized": "'Cause I, I can feel a real connection, a supernatural attraction, ah",
+          "translation_en": "'Cause I, I can feel a real connection, a supernatural attraction, ah",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 182.9,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_21",
+          "start": 187.4,
+          "end": 191.6,
+          "original": "I got the feels for you, yeah, yeah, yeah, yeah",
+          "romanized": "I got the feels for you, yeah, yeah, yeah, yeah",
+          "translation_en": "I got the feels for you, yeah, yeah, yeah, yeah",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 187.4,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_22",
+          "start": 191.8,
+          "end": 195.0,
+          "original": "You have stolen my heart, oh, yeah",
+          "romanized": "You have stolen my heart, oh, yeah",
+          "translation_en": "You have stolen my heart, oh, yeah",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 191.8,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_23",
+          "start": 195.2,
+          "end": 199.3,
+          "original": "Never let it go, oh-oh, no, never let it go, oh-oh-oh",
+          "romanized": "Never let it go, oh-oh, no, never let it go, oh-oh-oh",
+          "translation_en": "Never let it go, oh-oh, no, never let it go, oh-oh-oh",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 195.2,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_24",
+          "start": 199.5,
+          "end": 203.2,
+          "original": "Lightning straight to my heart, oh, yeah",
+          "romanized": "Lightning straight to my heart, oh, yeah",
+          "translation_en": "Lightning straight to my heart, oh, yeah",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 199.5,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_25",
+          "start": 203.3,
+          "end": 207.3,
+          "original": "I got all the feels for sure, yeah, I got all the feels for ya",
+          "romanized": "I got all the feels for sure, yeah, I got all the feels for ya",
+          "translation_en": "I got all the feels for sure, yeah, I got all the feels for ya",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 203.3,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_26",
+          "start": 207.5,
+          "end": 211.0,
+          "original": "Boy, I, boy, I, boy, I know, I know I get the feels",
+          "romanized": "Boy, I, boy, I, boy, I know, I know I get the feels",
+          "translation_en": "Boy, I, boy, I, boy, I know, I know I get the feels",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 207.5,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_27",
+          "start": 211.2,
+          "end": 215.3,
+          "original": "Boy, I, boy, I, boy, I know, I know you feel it too",
+          "romanized": "Boy, I, boy, I, boy, I know, I know you feel it too",
+          "translation_en": "Boy, I, boy, I, boy, I know, I know you feel it too",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 211.2,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_28",
+          "start": 215.6,
+          "end": 220.3,
+          "original": "Underneath the lights, we're singing like, we dance until we pass out",
+          "romanized": "Underneath the lights, we're singing like, we dance until we pass out",
+          "translation_en": "Underneath the lights, we're singing like, we dance until we pass out",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 215.6,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_29",
+          "start": 220.4,
+          "end": 224.9,
+          "original": "Hear each other's heart beats beat, stayin' by your side, boy, I'm wonderin' what's on your mind",
+          "romanized": "Hear each other's heart beats beat, stayin' by your side, boy, I'm wonderin' what's on your mind",
+          "translation_en": "Hear each other's heart beats beat, stayin' by your side, boy, I'm wonderin' what's on your mind",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 220.4,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_30",
+          "start": 225.0,
+          "end": 228.6,
+          "original": "Hear me spit it, I don't wanna be a fool, even if it's dumb, I don't wanna be a fool",
+          "romanized": "Hear me spit it, I don't wanna be a fool, even if it's dumb, I don't wanna be a fool",
+          "translation_en": "Hear me spit it, I don't wanna be a fool, even if it's dumb, I don't wanna be a fool",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 225.0,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_31",
+          "start": 228.7,
+          "end": 231.8,
+          "original": "Underneath the neon light, feel the electricity tonight",
+          "romanized": "Underneath the neon light, feel the electricity tonight",
+          "translation_en": "Underneath the neon light, feel the electricity tonight",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 228.7,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_32",
+          "start": 232.0,
+          "end": 238.9,
+          "original": "I know love it is such a funny thing, a mystery well, gotta get to know you more",
+          "romanized": "I know love it is such a funny thing, a mystery well, gotta get to know you more",
+          "translation_en": "I know love it is such a funny thing, a mystery well, gotta get to know you more",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 232.0,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_33",
+          "start": 239.0,
+          "end": 243.6,
+          "original": "'Cause I, I can feel a real connection, a supernatural attraction, ah",
+          "romanized": "'Cause I, I can feel a real connection, a supernatural attraction, ah",
+          "translation_en": "'Cause I, I can feel a real connection, a supernatural attraction, ah",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 239.0,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_34",
+          "start": 243.7,
+          "end": 247.9,
+          "original": "I got the feels for you, yeah, yeah, yeah, yeah",
+          "romanized": "I got the feels for you, yeah, yeah, yeah, yeah",
+          "translation_en": "I got the feels for you, yeah, yeah, yeah, yeah",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 243.7,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_35",
+          "start": 248.0,
+          "end": 251.2,
+          "original": "You have stolen my heart, oh, yeah",
+          "romanized": "You have stolen my heart, oh, yeah",
+          "translation_en": "You have stolen my heart, oh, yeah",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 248.0,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_36",
+          "start": 251.4,
+          "end": 255.4,
+          "original": "Never let it go, oh-oh, no, never let it go, oh-oh-oh",
+          "romanized": "Never let it go, oh-oh, no, never let it go, oh-oh-oh",
+          "translation_en": "Never let it go, oh-oh, no, never let it go, oh-oh-oh",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 251.4,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_37",
+          "start": 255.6,
+          "end": 259.3,
+          "original": "Lightning straight to my heart, oh, yeah",
+          "romanized": "Lightning straight to my heart, oh, yeah",
+          "translation_en": "Lightning straight to my heart, oh, yeah",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 255.6,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_38",
+          "start": 259.4,
+          "end": 263.7,
+          "original": "I got all the feels for sure, yeah, I got all the feels for ya",
+          "romanized": "I got all the feels for sure, yeah, I got all the feels for ya",
+          "translation_en": "I got all the feels for sure, yeah, I got all the feels for ya",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 259.4,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_39",
+          "start": 263.8,
+          "end": 267.1,
+          "original": "Boy, I, boy, I, boy, I know, I know I get the feels",
+          "romanized": "Boy, I, boy, I, boy, I know, I know I get the feels",
+          "translation_en": "Boy, I, boy, I, boy, I know, I know I get the feels",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 263.8,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_40",
+          "start": 267.2,
+          "end": 271.6,
+          "original": "Boy, I, boy, I, boy, I know, I know you feel it too",
+          "romanized": "Boy, I, boy, I, boy, I know, I know you feel it too",
+          "translation_en": "Boy, I, boy, I, boy, I know, I know you feel it too",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 267.2,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_41",
+          "start": 271.7,
+          "end": 275.2,
+          "original": "Boy, I, boy, I, boy, I know, I know I get the feels",
+          "romanized": "Boy, I, boy, I, boy, I know, I know I get the feels",
+          "translation_en": "Boy, I, boy, I, boy, I know, I know I get the feels",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 271.7,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_42",
+          "start": 275.3,
+          "end": 280.0,
+          "original": "Boy, I, boy, I, boy, I know, I know you feel it too",
+          "romanized": "Boy, I, boy, I, boy, I know, I know you feel it too",
+          "translation_en": "Boy, I, boy, I, boy, I know, I know you feel it too",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 275.3,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_43",
+          "start": 280.2,
+          "end": 284.1,
+          "original": "You got my attention, so what's your intention?",
+          "romanized": "You got my attention, so what's your intention?",
+          "translation_en": "You got my attention, so what's your intention?",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 280.2,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_44",
+          "start": 284.2,
+          "end": 287.9,
+          "original": "Yeah, tell me, baby, what's the deal?",
+          "romanized": "Yeah, tell me, baby, what's the deal?",
+          "translation_en": "Yeah, tell me, baby, what's the deal?",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 284.2,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_45",
+          "start": 288.1,
+          "end": 293.4,
+          "original": "Oh, one look and I know it, baby, my eyes already show it",
+          "romanized": "Oh, one look and I know it, baby, my eyes already show it",
+          "translation_en": "Oh, one look and I know it, baby, my eyes already show it",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 288.1,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_46",
+          "start": 293.5,
+          "end": 298.6,
+          "original": "That you, you, you give me the feels",
+          "romanized": "That you, you, you give me the feels",
+          "translation_en": "That you, you, you give me the feels",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 293.5,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_47",
+          "start": 298.8,
+          "end": 302.2,
+          "original": "You have stolen my heart, oh, yeah",
+          "romanized": "You have stolen my heart, oh, yeah",
+          "translation_en": "You have stolen my heart, oh, yeah",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 298.8,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_48",
+          "start": 302.3,
+          "end": 306.4,
+          "original": "Never let it go, oh-oh, no, never let it go, oh-oh-oh",
+          "romanized": "Never let it go, oh-oh, no, never let it go, oh-oh-oh",
+          "translation_en": "Never let it go, oh-oh, no, never let it go, oh-oh-oh",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 302.3,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_49",
+          "start": 306.6,
+          "end": 310.2,
+          "original": "Lightning straight to my heart, oh, yeah",
+          "romanized": "Lightning straight to my heart, oh, yeah",
+          "translation_en": "Lightning straight to my heart, oh, yeah",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 306.6,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_50",
+          "start": 310.4,
+          "end": 314.5,
+          "original": "I got all the feels for sure, yeah, I got all the feels for ya",
+          "romanized": "I got all the feels for sure, yeah, I got all the feels for ya",
+          "translation_en": "I got all the feels for sure, yeah, I got all the feels for ya",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 310.4,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_51",
+          "start": 314.7,
+          "end": 318.0,
+          "original": "Boy, I, boy, I, boy, I know, I know I get the feels",
+          "romanized": "Boy, I, boy, I, boy, I know, I know I get the feels",
+          "translation_en": "Boy, I, boy, I, boy, I know, I know I get the feels",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 314.7,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_52",
+          "start": 318.2,
+          "end": 322.6,
+          "original": "Boy, I, boy, I, boy, I know, I know you feel it too",
+          "romanized": "Boy, I, boy, I, boy, I know, I know you feel it too",
+          "translation_en": "Boy, I, boy, I, boy, I know, I know you feel it too",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 318.2,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_53",
+          "start": 322.7,
+          "end": 326.2,
+          "original": "Boy, I, boy, I, boy, I know, I know I get the feels",
+          "romanized": "Boy, I, boy, I, boy, I know, I know I get the feels",
+          "translation_en": "Boy, I, boy, I, boy, I know, I know I get the feels",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 322.7,
+          "is_uncertain": false
+        },
+        {
+          "id": "line_54",
+          "start": 326.3,
+          "end": 331.0,
+          "original": "Boy, I, boy, I, boy, I know, I know you feel it too",
+          "romanized": "Boy, I, boy, I, boy, I know, I know you feel it too",
+          "translation_en": "Boy, I, boy, I, boy, I know, I know you feel it too",
+          "singer": "artist",
+          "singalong_request": false,
+          "start_display": 326.3,
+          "is_uncertain": false
+        }
+      ],
+      "context_injected": ""
+    }
+  ],
+  "verification_log": [
+    {
+      "loop_count": 1,
+      "line_id": "line_21",
+      "timestamp_str": "13:01",
+      "check_item": "큰 시간 오류",
+      "result": "FIXED",
+      "changes": "회차 1: 기존 801.5초(13:21.5)에서 실제 지효의 파트 시작 시점인 781.0초(13:01.0)로 20.5초 앞당겨 재정렬함."
+    },
+    {
+      "loop_count": 1,
+      "line_id": "line_22",
+      "timestamp_str": "13:09",
+      "check_item": "큰 시간 오류",
+      "result": "FIXED",
+      "changes": "회차 1: 기존 810.2초(13:30.2)에서 실제 발성 시점인 789.0초(13:09.0)로 재정렬하고 텍스트를 'What's up, LA! Let's go!'로 보정함."
+    },
+    {
+      "loop_count": 1,
+      "line_id": "line_23",
+      "timestamp_str": "13:18",
+      "check_item": "큰 시간 오류",
+      "result": "FIXED",
+      "changes": "회차 1: 기존 817.0초(13:37.0)에서 실제 떼창 시작 시점인 798.0초(13:18.0)로 19.0초 앞당겨 재정렬함."
+    },
+    {
+      "loop_count": 1,
+      "line_id": "line_24",
+      "timestamp_str": "13:25",
+      "check_item": "큰 시간 오류",
+      "result": "FIXED",
+      "changes": "회차 1: 기존 825.2초(13:45.2)에서 채영의 실제 가창 시점인 805.0초(13:25.0)로 재정렬함."
+    },
+    {
+      "loop_count": 1,
+      "line_id": "line_19",
+      "timestamp_str": "15:06",
+      "check_item": "큰 시간 오류",
+      "result": "FIXED",
+      "changes": "기존 910.1초에서 실제 가창 시작 시점인 15:06 (906.0초)로 -4.1초 앞당겨 재정렬"
+    },
+    {
+      "loop_count": 1,
+      "line_id": "line_20",
+      "timestamp_str": "15:13",
+      "check_item": "큰 시간 오류 및 가사 불일치",
+      "result": "FIXED",
+      "changes": "기존 916.4초에서 실제 발성 시점인 15:13 (913.0초)로 정렬하고, 라이브에서 실제로 부른 '이렇게 좋은데'로 가사 수정"
+    },
+    {
+      "loop_count": 1,
+      "line_id": "line_21",
+      "timestamp_str": "15:16",
+      "check_item": "큰 시간 오류",
+      "result": "FIXED",
+      "changes": "기존 921.1초에서 실제 발성 시점인 15:16.5 (916.5초)로 -4.6초 재정렬"
+    },
+    {
+      "loop_count": 1,
+      "line_id": "line_22 ~ line_51",
+      "timestamp_str": "15:22 ~ 17:19",
+      "check_item": "큰 시간 오류",
+      "result": "FIXED",
+      "changes": "후반부 전체 구간에 걸쳐 누적된 4.0초 ~ 12.0초의 타임스탬프 지연 오류를 실제 라이브 오디오 발성 시점에 맞춰 전면 재정렬"
+    },
+    {
+      "loop_count": 1,
+      "line_id": "line_11",
+      "timestamp_str": "25:32",
+      "check_item": "큰 시간 오류",
+      "result": "FIXED",
+      "changes": "회차 1: line_11 시작 시간 1539.0(25:39)로 잘못 기재되어 7.0초 지연 감지 -> 실제 첫 단어 발성 시점인 1532.0(25:32)로 수정"
+    },
+    {
+      "loop_count": 2,
+      "line_id": "line_17",
+      "timestamp_str": "26:44",
+      "check_item": "누락 줄 복구",
+      "result": "FIXED",
+      "changes": "회차 2: 26:44 구간에서 미나가 'Ooh, no matter what you got me, I got you, and I wouldn't want it any other way' 전체 구절을 가창하였으나 전반부 가사가 누락되어 있어 온전한 가사로 복구 및 종료 시간 1609.5로 미세 조정"
+    }
+  ],
+  "metrics": {
+    "processing_time_sec": 14.1,
+    "fixed_count": 0,
+    "section_boundary_accuracy": "21 segments (≤ 1.0s)",
+    "avg_time_error_sec": 0.42,
+    "live_song_processing_sec": 14.1
+  }
+}

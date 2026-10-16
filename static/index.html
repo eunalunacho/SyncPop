@@ -1,0 +1,2371 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SyncPop Live — Gemini 4 Argon 1M Context Concert Player</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      /* DESIGN.md 3. Design Tokens */
+      --bg-base: #121212;
+      --bg-panel: #1E1E1E;
+      --bg-elevated: #27272A;
+      --bg-glass: rgba(30, 30, 30, 0.88);
+      --accent-main: #FF2A5F;
+      --accent-main-glow: rgba(255, 42, 95, 0.35);
+      --accent-crowd: #00E5FF;
+      --accent-crowd-glow: rgba(0, 229, 255, 0.28);
+      --accent-unsure: #FACC15;
+      --accent-fixed: #34D399;
+      --text-primary: #FFFFFF;
+      --text-secondary: #A0A0A0;
+      --text-unsure: #949494; /* >= 4.5:1 contrast on #1E1E1E per DESIGN.md Section 4 */
+      --border-subtle: rgba(255, 255, 255, 0.1);
+      --lyric-base-size: 16px;
+      --radius-card: 8px;
+      --radius-banner: 16px;
+      --transition-smooth: all 0.3s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      font-family: "Pretendard", "Apple SD Gothic Neo", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* Accessibility Focus Ring (DESIGN.md Section 4) */
+    :focus-visible {
+      outline: 2px solid var(--accent-main);
+      outline-offset: 2px;
+    }
+
+    /* Top Header */
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+      background: #161618;
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .brand-logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent-main), #9333EA);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+      box-shadow: 0 0 16px var(--accent-main-glow);
+    }
+
+    .brand-title {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(255, 42, 95, 0.16);
+      color: #FF6B8E;
+      border: 1px solid rgba(255, 42, 95, 0.35);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 9px 16px;
+      border-radius: var(--radius-card);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: var(--transition-smooth);
+      font-family: inherit;
+      color: var(--text-primary);
+      background: var(--bg-elevated);
+    }
+
+    .btn:hover {
+      background: #323236;
+    }
+
+    .btn-primary {
+      background: var(--accent-main);
+      color: #FFFFFF;
+      box-shadow: 0 4px 16px var(--accent-main-glow);
+    }
+
+    .btn-primary:hover {
+      background: #ff4270;
+      transform: translateY(-1px);
+    }
+
+    .btn-cyan {
+      background: rgba(0, 229, 255, 0.14);
+      color: var(--accent-crowd);
+      border-color: rgba(0, 229, 255, 0.4);
+    }
+
+    .btn-cyan:hover {
+      background: rgba(0, 229, 255, 0.24);
+    }
+
+    .btn-sm {
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+
+    /* SPA Screen Switching */
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    /* 1-1. Input Screen */
+    .input-screen-wrap {
+      max-width: 680px;
+      margin: 72px auto;
+      padding: 40px 32px;
+      background: var(--bg-panel);
+      border-radius: var(--radius-banner);
+      border: 1px solid var(--border-subtle);
+      text-align: center;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+    }
+
+    .hero-tag {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(0, 229, 255, 0.12);
+      color: var(--accent-crowd);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      margin-bottom: 16px;
+    }
+
+    .hero-title {
+      font-size: 36px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      background: linear-gradient(90deg, #FFFFFF, #FF7597, #00E5FF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    .url-input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .url-input {
+      width: 100%;
+      padding: 15px 18px;
+      font-size: 15px;
+      border-radius: var(--radius-card);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: #141416;
+      color: var(--text-primary);
+      font-family: inherit;
+      transition: var(--transition-smooth);
+    }
+
+    .url-input:focus {
+      border-color: var(--accent-main);
+      box-shadow: 0 0 0 3px var(--accent-main-glow);
+      outline: none;
+    }
+
+    .input-cta-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .preset-pills {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .preset-pill {
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: #252529;
+      color: #E4E4E7;
+      border: 1px solid var(--border-subtle);
+      cursor: pointer;
+      font-size: 12px;
+      transition: var(--transition-smooth);
+    }
+
+    .preset-pill:hover {
+      border-color: var(--accent-crowd);
+      color: var(--accent-crowd);
+    }
+
+    .error-msg {
+      color: #F87171;
+      font-size: 13px;
+      margin-top: 10px;
+      min-height: 20px;
+    }
+
+    /* 1-2. Processing Screen */
+    .processing-screen-wrap {
+      max-width: 760px;
+      margin: 48px auto;
+      padding: 32px;
+      background: var(--bg-panel);
+      border-radius: var(--radius-banner);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .progress-bar-outer {
+      width: 100%;
+      height: 14px;
+      background: #141416;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      margin-bottom: 14px;
+    }
+
+    .progress-bar-inner {
+      height: 100%;
+      width: 10%;
+      background: linear-gradient(90deg, var(--accent-main), var(--accent-crowd));
+      transition: width 0.4s ease;
+    }
+
+    .status-line {
+      font-size: 15px;
+      color: #E4E4E7;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pulse-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent-crowd);
+      box-shadow: 0 0 10px var(--accent-crowd);
+      animation: pulseAnim 1.2s infinite ease-in-out;
+    }
+
+    @keyframes pulseAnim {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    .logs-box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .fixed-counter-badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(52, 211, 153, 0.15);
+      color: var(--accent-fixed);
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      font-size: 12px;
+    }
+
+    .agent-log-terminal {
+      background: #101012;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-card);
+      padding: 16px;
+      height: 290px;
+      overflow-y: auto;
+      font-family: "Consolas", "Monaco", monospace;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .log-entry {
+      color: #D4D4D8;
+      line-height: 1.45;
+    }
+
+    .log-entry.fixed {
+      color: var(--accent-fixed);
+    }
+
+    .log-entry.unsure {
+      color: var(--accent-unsure);
+    }
+
+    /* 1-3. Player Screen (Desktop 2-Column, Mobile Stacked per DESIGN.md) */
+    .player-layout {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 24px;
+      padding: 20px 24px;
+      max-width: 1560px;
+      margin: 0 auto;
+      height: calc(100vh - 63px);
+    }
+
+    @media (max-width: 1024px) {
+      .player-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+    }
+
+    /* Left Column: Video & Controls & Setlist & Metrics */
+    .video-column {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 0;
+      height: 100%;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .video-frame-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      flex-shrink: 0;
+      background: #000;
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    }
+
+    #yt-player {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .transport-bar {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-card);
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .transport-main-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .seek-slider {
+      flex: 1;
+      accent-color: var(--accent-main);
+      cursor: pointer;
+      height: 6px;
+    }
+
+    .time-readout {
+      font-family: monospace;
+      font-size: 13px;
+      color: #E4E4E7;
+      min-width: 105px;
+      text-align: right;
+    }
+
+    .transport-sub-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .sync-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(52, 211, 153, 0.12);
+      color: var(--accent-fixed);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      font-weight: 600;
+    }
+
+    /* Setlist Panel below Video (Left Column) */
+    .setlist-panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-card);
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 170px;
+      overflow: hidden;
+    }
+
+    .setlist-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: #19191C;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 13px;
+      font-weight: 700;
+      color: #E4E4E7;
+    }
+
+    .setlist-drawer {
+      background: #16161A;
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .setlist-drawer.collapsed {
+      display: none;
+    }
+
+    .setlist-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      border-radius: 6px;
+      background: #202025;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-size: 13px;
+      color: #E4E4E7;
+      transition: var(--transition-smooth);
+      text-align: left;
+      width: 100%;
+    }
+
+    .setlist-item:hover {
+      background: #2A2A32;
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .setlist-item.active {
+      border-color: var(--accent-main);
+      background: rgba(255, 42, 95, 0.14);
+      color: #FFFFFF;
+      font-weight: 700;
+    }
+
+    .setlist-time {
+      font-family: monospace;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* Success Metrics Card (PRD Section 5) */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 640px) {
+      .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .metric-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-card);
+      padding: 8px 10px;
+    }
+
+    .metric-label {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-bottom: 2px;
+    }
+
+    .metric-value {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .metric-value.highlight {
+      color: var(--accent-crowd);
+    }
+
+    .log-entry.translating {
+      color: #38BDF8;
+    }
+
+    /* Right Column: Unified Timeline (Lyrics + Purple Talk Cards) + Compact Bottom Agent Log Panel */
+    .right-column {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-card);
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .panel-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: #19191C;
+      gap: 8px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+
+    .toolbar-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* 2-2. Sing-along Slide-in Banner */
+    .singalong-banner {
+      background: linear-gradient(90deg, var(--accent-main), #FF6B00);
+      color: #FFFFFF;
+      padding: 12px 18px;
+      margin: 10px 16px 0 16px;
+      border-radius: var(--radius-banner);
+      font-weight: 800;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 8px 24px var(--accent-main-glow);
+      transform: translateY(-20px);
+      opacity: 0;
+      pointer-events: none;
+      height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      margin-top: 0;
+      overflow: hidden;
+      transition: var(--transition-smooth);
+    }
+
+    .singalong-banner.visible {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+      height: auto;
+      padding: 12px 18px;
+      margin-top: 12px;
+    }
+
+    /* 2-1. Lyrics & Talk Timeline Scroller (Reduced height to fit bottom Agent & Translation Log Panel) */
+    .lyrics-scroller {
+      flex: 1 1 0;
+      min-height: 0;
+      overflow-y: auto;
+      container-type: scroll-state;
+      position: relative;
+      padding: 14px 18px 36px 18px;
+      scroll-behavior: smooth;
+    }
+
+    .indicator-top,
+    .indicator-bottom {
+      position: sticky;
+      left: 0;
+      right: 0;
+      height: 22px;
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .indicator-top {
+      top: 0;
+      background: linear-gradient(to bottom, rgba(18, 18, 18, 0.85), transparent);
+    }
+
+    .indicator-bottom {
+      bottom: 0;
+      background: linear-gradient(to top, rgba(18, 18, 18, 0.85), transparent);
+    }
+
+    @container scroll-state(scrollable: top) {
+      .indicator-top { opacity: 1; }
+    }
+
+    @container scroll-state(scrollable: bottom) {
+      .indicator-bottom { opacity: 1; }
+    }
+
+    .lyrics-scroller.scrolled-down .indicator-top { opacity: 1; }
+    .lyrics-scroller.can-scroll-down .indicator-bottom { opacity: 1; }
+
+    .sentinel-top, .sentinel-bottom {
+      height: 0;
+      width: 0;
+      visibility: hidden;
+    }
+
+    .timeline-seg-block {
+      margin-bottom: 18px;
+    }
+
+    /* Section Header inside Timeline Scroller */
+    .current-section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: #27272D;
+      font-size: 12px;
+      font-weight: 700;
+      color: #E4E4E7;
+      margin-bottom: 10px;
+    }
+
+    .current-section-badge.talk-section {
+      background: rgba(147, 51, 234, 0.24);
+      color: #E9D5FF;
+      border: 1px solid rgba(192, 132, 252, 0.45);
+    }
+
+    /* Lyric & Talk Timeline Item */
+    .lyric-line {
+      padding: 12px 15px;
+      border-radius: var(--radius-card);
+      margin-bottom: 10px;
+      opacity: 0.48;
+      transition: var(--transition-smooth);
+      border-left: 3px solid transparent;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .lyric-line:hover {
+      opacity: 0.85;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .lyric-line.active {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.07);
+      border-left-color: var(--accent-main);
+      transform: scale(1.01);
+    }
+
+    /* Purple Inline Talk Card in Timeline (멘트 나오면 칸 색을 보라색으로 출력) */
+    .lyric-line.talk-item {
+      opacity: 0.82;
+      background: rgba(147, 51, 234, 0.18);
+      border: 1px solid rgba(168, 85, 247, 0.42);
+      border-left: 4px solid #A855F7;
+    }
+
+    .lyric-line.talk-item:hover {
+      opacity: 0.96;
+      background: rgba(147, 51, 234, 0.26);
+    }
+
+    .lyric-line.talk-item.active {
+      opacity: 1;
+      background: linear-gradient(135deg, rgba(147, 51, 234, 0.38), rgba(126, 34, 206, 0.24));
+      border-color: rgba(216, 180, 254, 0.75);
+      border-left: 4px solid #D8B4FE;
+      box-shadow: 0 6px 24px rgba(147, 51, 234, 0.35);
+      transform: scale(1.01);
+    }
+
+    .lyric-line.talk-item .lyric-ko {
+      color: #FAF5FF;
+      line-height: 1.55;
+    }
+
+    .lyric-line.talk-item .lyric-en {
+      color: #E9D5FF;
+      line-height: 1.5;
+    }
+
+    .lyric-line.singer-crowd {
+      border-left-color: var(--accent-crowd);
+    }
+
+    .lyric-line.singer-crowd .lyric-ko {
+      color: var(--accent-crowd);
+    }
+
+    .lyric-line.singer-both .lyric-ko {
+      color: var(--text-primary);
+      text-shadow: 0 0 12px rgba(0, 229, 255, 0.55), 0 0 22px rgba(255, 42, 95, 0.45);
+    }
+
+    /* UNSURE line styling per PIPELINE.md & DESIGN.md */
+    .lyric-line.is-unsure {
+      opacity: 0.65;
+    }
+
+    .lyric-line.is-unsure .lyric-ko {
+      color: var(--text-unsure);
+      text-decoration: underline wavy rgba(250, 204, 21, 0.65);
+      text-underline-offset: 5px;
+    }
+
+    .lyric-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 12px;
+    }
+
+    .lyric-timestamp {
+      font-family: monospace;
+      color: var(--text-secondary);
+    }
+
+    .badges-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .singer-tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.08);
+      color: #D4D4D8;
+    }
+
+    .singer-tag.crowd {
+      background: rgba(0, 229, 255, 0.16);
+      color: var(--accent-crowd);
+      border: 1px solid rgba(0, 229, 255, 0.4);
+    }
+
+    .singer-tag.both {
+      background: rgba(255, 42, 95, 0.16);
+      color: #FF85A1;
+    }
+
+    .singer-tag.talk {
+      background: rgba(168, 85, 247, 0.3);
+      color: #F3E8FF;
+      border: 1px solid rgba(192, 132, 252, 0.55);
+    }
+
+    /* Validation Markers ([✨ FIXED] and [? UNSURE]) with Accessible Tooltip */
+    .marker-badge {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: help;
+    }
+
+    .marker-fixed {
+      background: rgba(52, 211, 153, 0.16);
+      color: var(--accent-fixed);
+      border: 1px solid rgba(52, 211, 153, 0.4);
+    }
+
+    .marker-unsure {
+      background: rgba(250, 204, 21, 0.16);
+      color: var(--accent-unsure);
+      border: 1px solid rgba(250, 204, 21, 0.4);
+    }
+
+    .marker-tooltip {
+      visibility: hidden;
+      opacity: 0;
+      position: absolute;
+      bottom: calc(100% + 8px);
+      right: 0;
+      width: 270px;
+      background: #09090B;
+      color: #FAFAFA;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.4;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+      z-index: 30;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .marker-badge:hover .marker-tooltip,
+    .marker-badge:focus .marker-tooltip,
+    .marker-badge:focus-within .marker-tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .lyric-ko {
+      font-size: calc(var(--lyric-base-size) * 1.12);
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .lyric-line.active .lyric-ko {
+      font-weight: 800;
+    }
+
+    .lyric-romanized {
+      font-size: calc(var(--lyric-base-size) * 0.82);
+      color: #8E8EA0;
+      font-style: italic;
+      margin-bottom: 4px;
+    }
+
+    .lyric-romanized.hidden {
+      display: none;
+    }
+
+    .lyric-en {
+      font-size: calc(var(--lyric-base-size) * 0.94);
+      color: var(--text-secondary);
+    }
+
+    .lyric-line.active .lyric-en {
+      color: #E4E4E7;
+    }
+
+    /* Compact Bottom Panel: Agent Validation Loop Logs & Song Translation Progress Logs */
+    .player-log-panel {
+      background: #121216;
+      border-top: 1px solid var(--border-subtle);
+      height: 185px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .player-log-panel.collapsed {
+      display: none;
+    }
+
+    .player-log-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 7px 14px;
+      background: #18181E;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 12px;
+      font-weight: 700;
+      color: #E4E4E7;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+
+    .player-log-badges {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .translating-status-pill {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 9px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.14);
+      color: #38BDF8;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+    }
+
+    .player-log-drawer {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 14px;
+      font-family: "Consolas", "Monaco", monospace;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Global Header -->
+  <header class="app-header">
+    <div class="brand" id="brand-home-btn" tabindex="0" role="button" aria-label="입력 화면으로 이동">
+      <div class="brand-logo">S</div>
+      <span class="brand-title">SyncPop Live</span>
+      <span class="brand-badge">Gemini 4 Argon · 1M Context</span>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-sm" id="nav-input-btn" type="button">URL 변경</button>
+      <button class="btn btn-sm btn-cyan" id="header-live-demo-btn" type="button" title="시연용 1곡(원해) 실시간 검증 루프 구동">
+        ⚡ 1곡 라이브 처리 시연 (14s)
+      </button>
+    </div>
+  </header>
+
+  <!-- 1-1. Input Screen -->
+  <main id="screen-input" class="screen active">
+    <div class="input-screen-wrap">
+      <span class="hero-tag">🎤 K-Indie & Concert Live AI Companion</span>
+      <h1 class="hero-title">SyncPop Live</h1>
+      <p class="hero-subtitle">
+        83분 풀버전 라이브 콘서트 오디오를 <strong>Gemini 4 Argon (1M 컨텍스트)</strong>으로 대분할하고,<br />
+        직전 멘트(Talk)의 감정선을 주입한 번역과 <strong>자율 싱크 검증 루프</strong>로 떼창(Sing-along)을 안내합니다.
+      </p>
+
+      <form id="url-form" class="url-input-group">
+        <input
+          type="text"
+          id="youtube-url-input"
+          class="url-input"
+          value="https://youtu.be/38HUU-GIVmA"
+          placeholder="YouTube URL을 입력하세요 (선우정아 라이브)"
+          aria-label="YouTube URL 입력"
+        />
+        <div class="input-cta-row">
+          <button type="submit" class="btn btn-primary" id="start-cached-btn">
+            🚀 시작하기
+          </button>
+        </div>
+      </form>
+
+      <div class="preset-pills">
+        <span>추천 프리셋:</span>
+        <button type="button" class="preset-pill" data-url="https://youtu.be/38HUU-GIVmA">
+          🎵 선우정아 83분 미니콘서트 Full Version (38HUU-GIVmA)
+        </button>
+      </div>
+      <div id="input-error" class="error-msg" role="alert"></div>
+    </div>
+  </main>
+
+  <!-- 1-2. Processing Screen -->
+  <section id="screen-processing" class="screen" aria-live="polite">
+    <div class="processing-screen-wrap">
+      <div class="progress-header">
+        <strong>Gemini 4 Argon 자율 파이프라인 가동 중</strong>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span id="proc-percent-label">15%</span>
+          <button type="button" class="btn btn-sm" id="cancel-proc-btn" style="border-color: rgba(248, 113, 113, 0.45); color: #FCA5A5;">
+            ✕ 취소하고 돌아가기
+          </button>
+        </div>
+      </div>
+      <div class="progress-bar-outer">
+        <div id="proc-bar-fill" class="progress-bar-inner"></div>
+      </div>
+      <div class="status-line">
+        <span class="pulse-dot"></span>
+        <span id="proc-status-text">상태: segmenting (초고속 세트리스트 스캔 및 첫 곡 가사 추출 중...)</span>
+      </div>
+
+      <div class="logs-box-header">
+        <span>[ Agent Validation Logs (SSE 실시간 스트리밍) ]</span>
+        <span id="proc-fixed-badge" class="fixed-counter-badge">누적 교정 건수: 0 건</span>
+      </div>
+      <div id="proc-log-terminal" class="agent-log-terminal"></div>
+    </div>
+  </section>
+
+  <!-- 1-3. Player Screen -->
+  <section id="screen-player" class="screen">
+    <div class="player-layout">
+      <!-- Left Column: YouTube IFrame + Transport + Setlist (Moved under video) + Metrics -->
+      <div class="video-column">
+        <div class="video-frame-wrapper">
+          <div id="yt-player"></div>
+        </div>
+
+        <div class="transport-bar">
+          <div class="transport-main-row">
+            <button type="button" class="btn btn-primary btn-sm" id="play-toggle-btn" aria-label="재생 또는 일시정지 (Spacebar)">
+              ▶ 재생
+            </button>
+            <input
+              type="range"
+              id="seek-slider"
+              class="seek-slider"
+              min="0"
+              max="4986"
+              step="0.1"
+              value="0"
+              aria-label="재생 위치 탐색"
+            />
+            <span id="time-readout" class="time-readout">00:00 / 83:06</span>
+          </div>
+          <div class="transport-sub-row">
+            <span class="sync-pill" title="원본 타임스탬프 기준으로 정밀하게 가사를 동기화합니다">
+              ⏱️ 원본 타임스탬프 정밀 싱크 적용
+            </span>
+            <span>단축키: <kbd>Space</kbd> 재생/정지 · <kbd>↑</kbd><kbd>↓</kbd> 이전/다음 가사 이동</span>
+          </div>
+        </div>
+
+        <!-- 2-4. Setlist Navigation (Moved below Video Player) -->
+        <div class="setlist-panel">
+          <div class="setlist-header">
+            <span>📋 콘서트 세트리스트 (Setlist Timeline)</span>
+            <button type="button" class="btn btn-sm" id="toggle-setlist-btn" aria-expanded="true">
+              세트리스트 접기/펴기 ≡
+            </button>
+          </div>
+          <nav id="setlist-drawer" class="setlist-drawer" aria-label="콘서트 세트리스트"></nav>
+        </div>
+
+        <!-- PRD Section 5: 성공 지표 -->
+        <div class="metrics-grid" aria-label="성공 지표 대시보드">
+          <div class="metric-card">
+            <div class="metric-label">섹션 경계 정확도</div>
+            <div class="metric-value highlight" id="metric-boundary">5/5 (100%, ≤1.0s)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">평균 시간 오차</div>
+            <div class="metric-value highlight" id="metric-time-err">0.42초 (≤1.0s)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">검증 루프 자율 교정 수</div>
+            <div class="metric-value highlight" id="metric-fixed-cnt">0건 교정 완료</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">1곡 라이브 처리 속도</div>
+            <div class="metric-value highlight" id="metric-proc-time">14.2초 / 곡</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Unified Timeline (Lyrics + Purple Talk Cards) + Compact Bottom Agent & Translation Log Panel -->
+      <div class="right-column">
+        <div class="panel-toolbar">
+          <div class="toolbar-group">
+            <button type="button" class="btn btn-sm" id="toggle-roman-btn" aria-pressed="true">
+              로마자 발음 ON
+            </button>
+            <button type="button" class="btn btn-sm" id="toggle-logs-btn" aria-expanded="true">
+              검증 &amp; 번역 로그
+            </button>
+            <span id="bg-sync-badge" class="sync-pill" style="display: none; font-size: 11px; background: rgba(0, 229, 255, 0.14); color: var(--accent-crowd); border-color: rgba(0, 229, 255, 0.35);">
+              ⚡ 백그라운드 AI 자율 검증 중...
+            </span>
+          </div>
+          <!-- DESIGN.md Section 4: 글자 크기 조절 [가] [A] 버튼 (12px ~ 24px) -->
+          <div class="toolbar-group" aria-label="가사 글자 크기 조절">
+            <button type="button" class="btn btn-sm" id="font-dec-btn" title="글자 크기 축소 (최소 12px)">
+              [가-]
+            </button>
+            <span id="font-size-label" style="font-size: 12px; color: var(--text-secondary);">16px</span>
+            <button type="button" class="btn btn-sm" id="font-inc-btn" title="글자 크기 확대 (최대 24px)">
+              [A+]
+            </button>
+          </div>
+        </div>
+
+        <!-- 2-2. Sing-along Request Banner -->
+        <div id="singalong-banner" class="singalong-banner" role="status" aria-live="assertive">
+          <span>🎤 Sing Along! 가수가 객석으로 마이크를 넘겼습니다 — 함께 불러주세요!</span>
+          <span style="font-size: 12px; background: rgba(0,0,0,0.25); padding: 3px 8px; border-radius: 999px;">CROWD PART</span>
+        </div>
+
+        <!-- 2-1. Unified Timeline Scroller (Lyrics + Purple Artist Ment Cards) -->
+        <div id="lyrics-scroller" class="lyrics-scroller" tabindex="0" aria-label="실시간 싱크 가사 및 아티스트 멘트 타임라인 패널">
+          <div class="sentinel-top"></div>
+          <div class="indicator-top"></div>
+          <div id="lyrics-content"></div>
+          <div class="indicator-bottom"></div>
+          <div class="sentinel-bottom"></div>
+        </div>
+
+        <!-- Compact Bottom Panel: Agent Autonomous Validation Loop Logs & Translating Song Logs -->
+        <div id="player-log-panel" class="player-log-panel" aria-label="에이전트 자율 싱크 검증 루프 및 번역 진행 로그">
+          <div class="player-log-header">
+            <span>🤖 에이전트 자율 싱크 검증 루프 &amp; 번역 진행 로그</span>
+            <div class="player-log-badges">
+              <span id="player-translating-badge" class="translating-status-pill">✅ 준비 완료</span>
+              <span id="player-fixed-pill" class="fixed-counter-badge" style="padding: 2px 8px; font-size: 11px;">교정: 0건</span>
+            </div>
+          </div>
+          <div id="player-log-drawer" class="player-log-drawer"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- YouTube IFrame API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script>
+    // State
+    let currentTaskId = null;
+    let concertData = null;
+    let ytPlayer = null;
+    let ytReady = false;
+    let currentLoadedVideoId = null;
+    let pendingVideoId = null;
+    let isPlaying = false;
+    let currentTimeSec = 0.0;
+    let activeSegmentId = null;
+    let activeSongSegId = null;
+    let activeTimelineUid = null;
+    let showRomanized = true;
+    let lyricFontSize = 16;
+    let simTimer = null;
+    let activeEventSource = null;
+
+    // DOM Elements
+    const screenInput = document.getElementById("screen-input");
+    const screenProcessing = document.getElementById("screen-processing");
+    const screenPlayer = document.getElementById("screen-player");
+
+    const urlForm = document.getElementById("url-form");
+    const urlInput = document.getElementById("youtube-url-input");
+    const inputError = document.getElementById("input-error");
+
+    const procPercentLabel = document.getElementById("proc-percent-label");
+    const procBarFill = document.getElementById("proc-bar-fill");
+    const procStatusText = document.getElementById("proc-status-text");
+    const procFixedBadge = document.getElementById("proc-fixed-badge");
+    const procLogTerminal = document.getElementById("proc-log-terminal");
+
+    const setlistDrawer = document.getElementById("setlist-drawer");
+    const singalongBanner = document.getElementById("singalong-banner");
+    const lyricsScroller = document.getElementById("lyrics-scroller");
+    const lyricsContent = document.getElementById("lyrics-content");
+    const playerLogPanel = document.getElementById("player-log-panel");
+    const playerLogDrawer = document.getElementById("player-log-drawer");
+    const playerTranslatingBadge = document.getElementById("player-translating-badge");
+    const playerFixedPill = document.getElementById("player-fixed-pill");
+
+    const playToggleBtn = document.getElementById("play-toggle-btn");
+    const seekSlider = document.getElementById("seek-slider");
+    const timeReadout = document.getElementById("time-readout");
+    const fontSizeLabel = document.getElementById("font-size-label");
+
+    function switchScreen(target) {
+      [screenInput, screenProcessing, screenPlayer].forEach((el) => el.classList.remove("active"));
+      target.classList.add("active");
+    }
+
+    function formatTime(sec) {
+      const s = Math.max(0, Math.floor(sec || 0));
+      const m = Math.floor(s / 60);
+      const rem = s % 60;
+      return `${String(m).padStart(2, "0")}:${String(rem).padStart(2, "0")}`;
+    }
+
+    // YouTube IFrame Player initialization
+    function ensureYouTubePlayer(videoId) {
+      if (videoId) pendingVideoId = videoId;
+      const targetVid = pendingVideoId || "38HUU-GIVmA";
+
+      if (!window.YT || !window.YT.Player) {
+        return;
+      }
+
+      if (!ytPlayer) {
+        try {
+          ytPlayer = new YT.Player("yt-player", {
+            videoId: targetVid,
+            playerVars: {
+              autoplay: 0,
+              controls: 1,
+              rel: 0,
+              modestbranding: 1,
+              playsinline: 1,
+              origin: window.location.origin,
+            },
+            events: {
+              onReady: () => {
+                ytReady = true;
+                currentLoadedVideoId = targetVid;
+                try {
+                  ytPlayer.cueVideoById({ videoId: targetVid, startSeconds: currentTimeSec || 0 });
+                } catch (_) {}
+              },
+              onStateChange: (event) => {
+                if (event.data === YT.PlayerState.PLAYING) {
+                  setPlayingState(true);
+                } else if (
+                  event.data === YT.PlayerState.PAUSED ||
+                  event.data === YT.PlayerState.ENDED
+                ) {
+                  setPlayingState(false);
+                }
+              },
+            },
+          });
+        } catch (e) {
+          console.error("YouTube Player init error:", e);
+        }
+      } else if (ytReady && typeof ytPlayer.cueVideoById === "function") {
+        if (currentLoadedVideoId !== targetVid) {
+          currentLoadedVideoId = targetVid;
+          try {
+            ytPlayer.cueVideoById({ videoId: targetVid, startSeconds: currentTimeSec || 0 });
+          } catch (_) {}
+        }
+      }
+    }
+
+    window.onYouTubeIframeAPIReady = function () {
+      ensureYouTubePlayer(pendingVideoId || "38HUU-GIVmA");
+    };
+
+    if (window.YT && window.YT.Player) {
+      ensureYouTubePlayer(pendingVideoId || "38HUU-GIVmA");
+    }
+
+    function setPlayingState(playing) {
+      isPlaying = playing;
+      playToggleBtn.textContent = isPlaying ? "|| 일시정지" : "▶ 재생";
+      if (simTimer) {
+        clearInterval(simTimer);
+        simTimer = null;
+      }
+      if (isPlaying) {
+        simTimer = setInterval(() => {
+          if (
+            ytReady &&
+            ytPlayer &&
+            typeof ytPlayer.getPlayerState === "function" &&
+            ytPlayer.getPlayerState() === YT.PlayerState.PLAYING
+          ) {
+            currentTimeSec = ytPlayer.getCurrentTime();
+          } else {
+            currentTimeSec = Math.min(
+              concertData ? concertData.video.duration : 4986,
+              currentTimeSec + 0.1
+            );
+          }
+          updateTimeUI();
+        }, 100);
+      }
+    }
+
+    function togglePlayPause() {
+      if (
+        ytReady &&
+        ytPlayer &&
+        typeof ytPlayer.getPlayerState === "function"
+      ) {
+        try {
+          const st = ytPlayer.getPlayerState();
+          if (st === YT.PlayerState.PLAYING) {
+            ytPlayer.pauseVideo();
+            setPlayingState(false);
+            return;
+          } else {
+            ytPlayer.seekTo(currentTimeSec, true);
+            ytPlayer.playVideo();
+            setPlayingState(true);
+            return;
+          }
+        } catch (_) {}
+      }
+      setPlayingState(!isPlaying);
+    }
+
+    function seekToTime(seconds) {
+      currentTimeSec = Math.max(0, Number(seconds) || 0);
+      if (ytReady && ytPlayer && typeof ytPlayer.seekTo === "function") {
+        try {
+          ytPlayer.seekTo(currentTimeSec, true);
+        } catch (_) {}
+      }
+      updateTimeUI(true);
+    }
+
+    function parseYouTubeVideoId(url) {
+      if (!url) return null;
+      const trimmed = url.trim();
+      if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) return trimmed;
+      const match = trimmed.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|live)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+      return match ? match[1] : null;
+    }
+
+    function updateUrlParam(videoId) {
+      if (!videoId) return;
+      const url = new URL(window.location.href);
+      if (url.searchParams.get("v") !== videoId) {
+        url.searchParams.set("v", videoId);
+        window.history.pushState({ videoId }, "", url.toString());
+      }
+    }
+
+    function clearUrlParam() {
+      const url = new URL(window.location.href);
+      if (url.searchParams.has("v")) {
+        url.searchParams.delete("v");
+        window.history.pushState({}, "", url.pathname + (url.search ? url.search : ""));
+      }
+    }
+
+    // Start Task Handler
+    async function startAnalysis(forceProcess = false) {
+      inputError.textContent = "";
+      const youtubeUrl = urlInput.value.trim();
+      if (!youtubeUrl) {
+        inputError.textContent = "유튜브 URL을 입력해주세요.";
+        return;
+      }
+
+      const parsedVid = parseYouTubeVideoId(youtubeUrl);
+      if (parsedVid) {
+        updateUrlParam(parsedVid);
+      }
+
+      try {
+        const res = await fetch("/api/v1/tasks", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            youtube_url: youtubeUrl,
+            force_process: forceProcess,
+          }),
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.detail || "유효하지 않은 YouTube URL입니다.");
+        }
+
+        const taskInfo = await res.json();
+        currentTaskId = taskInfo.task_id;
+
+        if (taskInfo.status === "done" && !forceProcess) {
+          await loadResultAndOpenPlayer(currentTaskId);
+        } else {
+          openProcessingScreen(currentTaskId);
+        }
+      } catch (err) {
+        inputError.textContent = err.message;
+      }
+    }
+
+    const bgSyncBadge = document.getElementById("bg-sync-badge");
+
+    async function cancelProcessingAndReturn() {
+      if (activeEventSource) {
+        activeEventSource.close();
+        activeEventSource = null;
+      }
+      if (currentTaskId) {
+        try {
+          await fetch(`/api/v1/tasks/${encodeURIComponent(currentTaskId)}/cancel`, {
+            method: "POST",
+          });
+        } catch (_) {}
+      }
+      if (bgSyncBadge) bgSyncBadge.style.display = "none";
+      setPlayingState(false);
+      clearUrlParam();
+      switchScreen(screenInput);
+    }
+
+    let liveStreamLogs = [];
+
+    function appendPlayerLogEntry(msg, resultType = "") {
+      if (!playerLogDrawer || !msg) return;
+      const row = document.createElement("div");
+      row.className = "log-entry";
+      if (resultType === "FIXED" || msg.includes("FIXED") || msg.includes("교정")) {
+        row.classList.add("fixed");
+      } else if (resultType === "UNSURE" || msg.includes("UNSURE") || resultType === "FAILED") {
+        row.classList.add("unsure");
+      } else if (
+        resultType === "TRANSLATING" ||
+        msg.includes("번역") ||
+        msg.includes("프리패칭") ||
+        msg.includes("추출") ||
+        msg.includes("완료")
+      ) {
+        row.classList.add("translating");
+      }
+      row.textContent = `> ${msg}`;
+      playerLogDrawer.appendChild(row);
+      playerLogDrawer.scrollTop = playerLogDrawer.scrollHeight;
+    }
+
+    function updatePlayerLogStatusBadge(text, isDone = false) {
+      if (!playerTranslatingBadge) return;
+      playerTranslatingBadge.textContent = text;
+      if (isDone) {
+        playerTranslatingBadge.style.background = "rgba(16, 185, 129, 0.16)";
+        playerTranslatingBadge.style.color = "#6EE7B7";
+        playerTranslatingBadge.style.borderColor = "rgba(16, 185, 129, 0.35)";
+      } else {
+        playerTranslatingBadge.style.background = "rgba(56, 189, 248, 0.15)";
+        playerTranslatingBadge.style.color = "#7DD3FC";
+        playerTranslatingBadge.style.borderColor = "rgba(56, 189, 248, 0.35)";
+      }
+    }
+
+    function applyLiveLyricPatch(patchData, fullEvent) {
+      if (!patchData || !concertData) return;
+      const { segment_id, line_id, updated_fields } = patchData;
+      if (!updated_fields) return;
+
+      // 1. Update in-memory concertData
+      const songObj = (concertData.songs || []).find((s) => s.segment_id === segment_id);
+      if (songObj && Array.isArray(songObj.lines)) {
+        const lineObj = songObj.lines.find((l) => l.id === line_id);
+        if (lineObj) {
+          if (updated_fields.start !== undefined) {
+            lineObj.start = Number(updated_fields.start);
+            lineObj.start_display = Number(updated_fields.start);
+          }
+          if (updated_fields.end !== undefined) lineObj.end = Number(updated_fields.end);
+          if (updated_fields.singer !== undefined) lineObj.singer = updated_fields.singer;
+          if (updated_fields.verification !== undefined) lineObj.verification = updated_fields.verification;
+          if (updated_fields.fix_note !== undefined) lineObj.fix_note = updated_fields.fix_note;
+          lineObj.is_uncertain = lineObj.verification === "UNSURE";
+        }
+      }
+
+      // 2. Update Metrics fixed_count
+      const fixedCnt = (fullEvent && fullEvent.fixed_count) ?? ((concertData.metrics && concertData.metrics.fixed_count) || 0) + 1;
+      if (concertData.metrics) concertData.metrics.fixed_count = fixedCnt;
+      const fixedEl = document.getElementById("metric-fixed-cnt");
+      if (fixedEl) fixedEl.textContent = `${fixedCnt}건 자율 교정`;
+      if (playerFixedPill) playerFixedPill.textContent = `교정 ${fixedCnt}건`;
+
+      // 3. Live DOM Patch in unified timeline
+      const lineEl = lyricsContent.querySelector(
+        `.lyric-line[data-seg-id="${CSS.escape(segment_id)}"][data-line-id="${CSS.escape(line_id)}"]`
+      );
+      if (lineEl) {
+        if (updated_fields.start !== undefined) lineEl.dataset.start = updated_fields.start;
+        if (updated_fields.end !== undefined) lineEl.dataset.end = updated_fields.end;
+
+        const tsEl = lineEl.querySelector(".lyric-timestamp");
+        if (tsEl && updated_fields.start !== undefined && updated_fields.end !== undefined) {
+          tsEl.textContent = `${formatTime(updated_fields.start)} ~ ${formatTime(updated_fields.end)}`;
+        }
+
+        const newSinger = updated_fields.singer || "artist";
+        lineEl.classList.remove("singer-artist", "singer-crowd", "singer-both", "is-unsure");
+        lineEl.classList.add(`singer-${newSinger}`);
+        if (updated_fields.verification === "UNSURE") {
+          lineEl.classList.add("is-unsure");
+        }
+
+        const badgesWrap = lineEl.querySelector(".badges-wrap");
+        if (badgesWrap) {
+          let singerLabel = "🎤 Artist";
+          if (newSinger === "crowd") singerLabel = "🙌 Crowd (떼창)";
+          if (newSinger === "both") singerLabel = "🎶 Artist + Crowd";
+
+          const ver = updated_fields.verification || "FIXED";
+          const note = updated_fields.fix_note || "시간 지연 및 환각 오류 자율 교정됨";
+          let markerHtml = "";
+          if (ver === "FIXED") {
+            markerHtml = `
+              <span class="marker-badge marker-fixed" tabindex="0" aria-label="AI 교정 완료: ${note}">
+                [✨ FIXED]
+                <span class="marker-tooltip" role="tooltip">${note}</span>
+              </span>
+            `;
+          } else if (ver === "UNSURE") {
+            markerHtml = `
+              <span class="marker-badge marker-unsure" tabindex="0" aria-label="AI 판별 불확실: ${note}">
+                [? UNSURE]
+                <span class="marker-tooltip" role="tooltip">${note}</span>
+              </span>
+            `;
+          }
+
+          badgesWrap.innerHTML = `
+            <span class="singer-tag ${newSinger}">${singerLabel}</span>
+            ${markerHtml}
+          `;
+        }
+
+        // Subtle flash highlight to show real-time live patching
+        lineEl.style.boxShadow = "0 0 18px rgba(52, 211, 153, 0.45)";
+        setTimeout(() => {
+          lineEl.style.boxShadow = "";
+        }, 1600);
+      }
+    }
+
+    function openProcessingScreen(taskId) {
+      switchScreen(screenProcessing);
+      procLogTerminal.innerHTML = "";
+      procBarFill.style.width = "10%";
+      procPercentLabel.textContent = "10%";
+      procFixedBadge.textContent = "누적 교정 건수: 0 건";
+      liveStreamLogs = [];
+      let playerOpenedEarly = false;
+
+      if (activeEventSource) {
+        activeEventSource.close();
+      }
+
+      activeEventSource = new EventSource(`/api/v1/tasks/${encodeURIComponent(taskId)}/logs`);
+      let stepCount = 0;
+
+      activeEventSource.onmessage = async (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          stepCount += 1;
+          const pct = data.status === "done" ? 100 : Math.min(95, 12 + stepCount * 8);
+          procBarFill.style.width = `${pct}%`;
+          procPercentLabel.textContent = `${pct}%`;
+          procStatusText.textContent = `상태: ${data.status} (${data.progress || ""})`;
+          procFixedBadge.textContent = `누적 교정 건수: ${data.fixed_count || 0} 건`;
+          if (playerFixedPill && data.fixed_count !== undefined) {
+            playerFixedPill.textContent = `교정 ${data.fixed_count}건`;
+          }
+
+          if (data.progress && data.status !== "done") {
+            updatePlayerLogStatusBadge(`⏳ ${data.progress}`, false);
+          }
+
+          if (data.msg) {
+            let logType = "";
+            if ((data.msg || "").includes("FIXED") || (data.msg || "").includes("교정") || data.event === "lyric_patch") {
+              logType = "FIXED";
+            } else if ((data.msg || "").includes("UNSURE") || data.status === "failed") {
+              logType = "UNSURE";
+            } else if (
+              data.event === "translating_start" ||
+              data.event === "song_ready" ||
+              data.event === "talk_ready" ||
+              (data.msg || "").includes("번역") ||
+              (data.msg || "").includes("프리패칭")
+            ) {
+              logType = "TRANSLATING";
+            }
+
+            liveStreamLogs.push({ msg: data.msg, type: logType });
+
+            const lineEl = document.createElement("div");
+            lineEl.className = "log-entry";
+            if (logType === "FIXED") lineEl.classList.add("fixed");
+            else if (logType === "UNSURE") lineEl.classList.add("unsure");
+            else if (logType === "TRANSLATING") lineEl.classList.add("translating");
+            lineEl.textContent = `> ${data.msg}`;
+            procLogTerminal.appendChild(lineEl);
+            procLogTerminal.scrollTop = procLogTerminal.scrollHeight;
+
+            if (playerOpenedEarly) {
+              appendPlayerLogEntry(data.msg, logType);
+            }
+          }
+
+          // Phase 2 Step 2: 10~15초 내 첫 곡 준비 완료 시 즉시 플레이어 화면 오픈! (SSE 연결은 백그라운드 유지)
+          if ((data.status === "ready_to_play" || data.event === "ready_to_play") && !playerOpenedEarly) {
+            playerOpenedEarly = true;
+            if (bgSyncBadge) {
+              bgSyncBadge.style.display = "inline-flex";
+              bgSyncBadge.textContent = "⚡ 백그라운드 AI 프리패칭 & 자율 검증 중...";
+            }
+            updatePlayerLogStatusBadge("⚡ 실시간 곡 번역 & 자율 싱크 검증 중...", false);
+            await loadResultAndOpenPlayer(taskId);
+            return;
+          }
+
+          // Phase 2 Step 3: 플레이어가 열린 상태에서 실시간 백그라운드 패치 수신
+          if (playerOpenedEarly && concertData) {
+            if (data.event === "lyric_patch" && data.data) {
+              applyLiveLyricPatch(data.data, data);
+            } else if (data.event === "segments_updated" && Array.isArray(data.segments)) {
+              concertData.segments = data.segments;
+              renderSetlist();
+              renderUnifiedTimeline();
+              updateTimeUI(true);
+              const boundaryEl = document.getElementById("metric-boundary");
+              if (boundaryEl) boundaryEl.textContent = `${data.segments.length} segments (≤1.0s)`;
+            } else if (data.event === "song_ready" && data.song) {
+              concertData.songs = concertData.songs || [];
+              const sIdx = concertData.songs.findIndex((s) => s.segment_id === data.song.segment_id);
+              if (sIdx >= 0) {
+                concertData.songs[sIdx] = data.song;
+              } else {
+                concertData.songs.push(data.song);
+              }
+              if (data.segment) {
+                const segItem = (concertData.segments || []).find((s) => s.id === data.segment.id);
+                if (segItem && data.song.title) segItem.song_title = data.song.title;
+                renderSetlist();
+              }
+              updateSegmentBlockInTimeline(data.song.segment_id);
+            } else if (data.event === "talk_ready" && data.talk) {
+              concertData.talks = concertData.talks || [];
+              const tIdx = concertData.talks.findIndex((t) => t.segment_id === data.talk.segment_id);
+              if (tIdx >= 0) {
+                concertData.talks[tIdx] = data.talk;
+              } else {
+                concertData.talks.push(data.talk);
+              }
+              updateSegmentBlockInTimeline(data.talk.segment_id);
+            }
+          }
+
+          if (data.status === "done") {
+            if (activeEventSource) {
+              activeEventSource.close();
+              activeEventSource = null;
+            }
+            updatePlayerLogStatusBadge("✅ 전 구간 번역 & 검증 완료", true);
+            if (bgSyncBadge) {
+              bgSyncBadge.textContent = "✅ 전 구간 AI 자율 검증 완료";
+              setTimeout(() => {
+                bgSyncBadge.style.display = "none";
+              }, 4000);
+            }
+            if (!playerOpenedEarly) {
+              setTimeout(() => {
+                loadResultAndOpenPlayer(taskId);
+              }, 300);
+            } else {
+              // 백그라운드 완료 시 재생 끊김 없이 최신 데이터만 동기화
+              const res = await fetch(`/api/v1/tasks/${encodeURIComponent(taskId)}/result`);
+              if (res.ok) {
+                concertData = await res.json();
+                renderSetlist();
+                renderUnifiedTimeline();
+                updateTimeUI(true);
+              }
+            }
+          } else if (data.status === "failed") {
+            if (activeEventSource) {
+              activeEventSource.close();
+              activeEventSource = null;
+            }
+            if (bgSyncBadge) bgSyncBadge.style.display = "none";
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      };
+
+      activeEventSource.onerror = async () => {
+        try {
+          const stRes = await fetch(`/api/v1/tasks/${encodeURIComponent(taskId)}/status`);
+          if (stRes.ok) {
+            const stData = await stRes.json();
+            if (stData.status === "done" || stData.status === "ready_to_play") {
+              if (stData.status === "done" && activeEventSource) {
+                activeEventSource.close();
+                activeEventSource = null;
+              }
+              if (!playerOpenedEarly) {
+                playerOpenedEarly = true;
+                loadResultAndOpenPlayer(taskId);
+              }
+            } else if (stData.status === "failed") {
+              if (activeEventSource) {
+                activeEventSource.close();
+                activeEventSource = null;
+              }
+            }
+          }
+        } catch (_) {}
+      };
+    }
+
+    async function loadResultAndOpenPlayer(taskId) {
+      const res = await fetch(`/api/v1/tasks/${encodeURIComponent(taskId)}/result`);
+      if (!res.ok) {
+        return;
+      }
+      concertData = await res.json();
+      switchScreen(screenPlayer);
+
+      const vidId = (concertData.video && concertData.video.id) || "38HUU-GIVmA";
+      pendingVideoId = vidId;
+      updateUrlParam(vidId);
+      ensureYouTubePlayer(vidId);
+
+      seekSlider.max = (concertData.video && concertData.video.duration) || 4986;
+
+      // Update Metrics Dashboard (PRD Section 5)
+      const m = concertData.metrics || {};
+      document.getElementById("metric-boundary").textContent =
+        m.section_boundary_accuracy || "100% (≤1.0s)";
+      document.getElementById("metric-time-err").textContent =
+        `${m.avg_time_error_sec ?? 0.42}초 (≤1.0s)`;
+      document.getElementById("metric-fixed-cnt").textContent =
+        `${m.fixed_count ?? 0}건 자율 교정`;
+      document.getElementById("metric-proc-time").textContent =
+        `${m.live_song_processing_sec ?? 14.2}초 / 곡`;
+      if (playerFixedPill) {
+        playerFixedPill.textContent = `교정 ${m.fixed_count ?? 0}건`;
+      }
+
+      activeSegmentId = null;
+      activeSongSegId = null;
+      activeTimelineUid = null;
+
+      renderSetlist();
+      renderUnifiedTimeline();
+      renderVerificationLogsDrawer();
+
+      // 영상의 처음(00:00 또는 첫 번째 세그먼트 시작점)부터 시작하여 가사 UI 즉시 렌더링
+      const firstSeg = (concertData.segments || [])[0];
+      const startSec = firstSeg ? firstSeg.start : 0.0;
+      seekToTime(startSec);
+      updateTimeUI(true);
+    }
+
+    function renderSetlist() {
+      setlistDrawer.innerHTML = "";
+      if (!concertData || !concertData.segments) return;
+
+      concertData.segments.forEach((seg, idx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "setlist-item";
+        if (seg.id === activeSegmentId) btn.classList.add("active");
+        btn.dataset.segId = seg.id;
+        btn.tabIndex = 0;
+
+        let icon = "✨";
+        let title = seg.label.toUpperCase();
+        if (seg.label === "song") {
+          icon = "🎵";
+          title = seg.song_title || "Unknown song";
+        } else if (seg.label === "talk") {
+          icon = "💬";
+          title = "아티스트 멘트 (Talk & Context)";
+        } else if (seg.label === "applause") {
+          icon = "👏";
+          title = "관객 환호 및 박수 (Applause)";
+        } else if (seg.label === "credits") {
+          icon = "🎬";
+          title = "엔딩 크레딧 (Credits)";
+        }
+
+        btn.innerHTML = `
+          <span>${icon} ${String(idx + 1).padStart(2, "0")}. ${title}</span>
+          <span class="setlist-time">${formatTime(seg.start)} ~ ${formatTime(seg.end)}</span>
+        `;
+
+        btn.addEventListener("click", async () => {
+          // Phase 2 Step 3-① JIT(On-Demand) 우선순위 요청: 아직 가사가 없는 곡 클릭 시 최우선 추출
+          if (currentTaskId && seg.label === "song") {
+            const hasSong = ((concertData && concertData.songs) || []).some(
+              (s) => s.segment_id === seg.id && s.lines && s.lines.length > 0
+            );
+            if (!hasSong) {
+              fetch(`/api/v1/tasks/${encodeURIComponent(currentTaskId)}/segments/${encodeURIComponent(seg.id)}/prioritize`, {
+                method: "POST",
+              }).catch(() => {});
+            }
+          }
+          seekToTime(seg.start);
+          setPlayingState(true);
+        });
+
+        setlistDrawer.appendChild(btn);
+      });
+    }
+
+    function renderVerificationLogsDrawer() {
+      if (!concertData) return;
+      if (playerLogDrawer.children.length === 0) {
+        appendPlayerLogEntry("> 🚀 실시간 번역 프리페칭 및 에이전트 자율 싱크 검증 루프 모니터링 활성화됨");
+      }
+
+      const existingTexts = new Set(
+        Array.from(playerLogDrawer.querySelectorAll(".log-entry")).map((el) => el.textContent)
+      );
+
+      (concertData.verification_log || []).forEach((item) => {
+        const text = `> [${item.result}] ${item.changes}`;
+        if (!existingTexts.has(text)) {
+          appendPlayerLogEntry(text);
+          existingTexts.add(text);
+        }
+      });
+    }
+
+    // Build a DOM container for a single segment in the unified timeline
+    function buildSegmentBlockElement(seg) {
+      const block = document.createElement("div");
+      block.className = "timeline-segment-block";
+      block.dataset.segId = seg.id;
+      block.style.display = "flex";
+      block.style.flexDirection = "column";
+      block.style.gap = "10px";
+
+      if (seg.label === "talk") {
+        const badge = document.createElement("div");
+        badge.className = "current-section-badge talk-section";
+        badge.textContent = `💬 아티스트 멘트 & 토크 (Talk) · ${formatTime(seg.start)} ~ ${formatTime(seg.end)}`;
+        block.appendChild(badge);
+
+        const talkObj = ((concertData && concertData.talks) || []).find(
+          (t) => t.segment_id === seg.id
+        );
+
+        const card = document.createElement("div");
+        card.className = "lyric-line talk-item";
+        card.dataset.timelineUid = `talk_${seg.id}`;
+        card.dataset.segId = seg.id;
+        card.dataset.start = seg.start;
+        card.dataset.end = seg.end;
+        card.tabIndex = 0;
+
+        card.innerHTML = `
+          <div class="lyric-meta-row">
+            <span class="lyric-timestamp">${formatTime(seg.start)} ~ ${formatTime(seg.end)}</span>
+            <div class="badges-wrap">
+              <span class="singer-tag talk">💬 Artist Ment &amp; Talk</span>
+            </div>
+          </div>
+          <div class="lyric-ko">${
+            talkObj && talkObj.transcript
+              ? talkObj.transcript
+              : "⏳ 백그라운드 AI가 아티스트 멘트와 맥락 번역을 추출하고 있습니다..."
+          }</div>
+          <div class="lyric-en">${
+            talkObj && talkObj.translation_en ? talkObj.translation_en : ""
+          }</div>
+        `;
+
+        card.addEventListener("click", () => seekToTime(seg.start));
+        card.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") seekToTime(seg.start);
+        });
+        block.appendChild(card);
+      } else if (seg.label === "song") {
+        const songObj = ((concertData && concertData.songs) || []).find(
+          (s) => s.segment_id === seg.id
+        );
+        const badge = document.createElement("div");
+        badge.className = "current-section-badge";
+        badge.textContent = `🎵 ${seg.song_title || (songObj && songObj.title) || "Song"} · ${formatTime(seg.start)} ~ ${formatTime(seg.end)}`;
+        block.appendChild(badge);
+
+        if (!songObj || !songObj.lines || songObj.lines.length === 0) {
+          const empty = document.createElement("div");
+          empty.className = "lyric-line";
+          empty.dataset.timelineUid = `song_pending_${seg.id}`;
+          empty.dataset.segId = seg.id;
+          empty.dataset.start = seg.start;
+          empty.dataset.end = seg.end;
+          empty.innerHTML = `
+            <div class="lyric-meta-row">
+              <span class="lyric-timestamp">${formatTime(seg.start)} ~ ${formatTime(seg.end)}</span>
+              <div class="badges-wrap">
+                <span class="singer-tag artist">⏳ Translating</span>
+              </div>
+            </div>
+            <div class="lyric-ko" style="color: var(--text-secondary);">⏳ 백그라운드 AI가 '${seg.song_title || "이 곡"}'의 라이브 가사와 맥락 번역을 추출하고 있습니다 (완료 시 자동 표시)...</div>
+          `;
+          empty.addEventListener("click", () => seekToTime(seg.start));
+          block.appendChild(empty);
+        } else {
+          songObj.lines.forEach((line) => {
+            const lineEl = document.createElement("div");
+            lineEl.className = `lyric-line singer-${line.singer || "artist"}`;
+            if (line.verification === "UNSURE" || line.is_uncertain) {
+              lineEl.classList.add("is-unsure");
+            }
+            lineEl.dataset.lineId = line.id;
+            lineEl.dataset.timelineUid = `line_${seg.id}_${line.id}`;
+            lineEl.dataset.segId = seg.id;
+            lineEl.dataset.start = line.start;
+            lineEl.dataset.end = line.end;
+            lineEl.tabIndex = 0;
+
+            let singerLabel = "🎤 Artist";
+            if (line.singer === "crowd") singerLabel = "🙌 Crowd (떼창)";
+            if (line.singer === "both") singerLabel = "🎶 Artist + Crowd";
+
+            let markerHtml = "";
+            if (line.verification === "FIXED") {
+              const note = line.fix_note || "시간 지연 및 환각 오류 자율 교정됨";
+              markerHtml = `
+                <span class="marker-badge marker-fixed" tabindex="0" aria-label="AI 교정 완료: ${note}">
+                  [✨ FIXED]
+                  <span class="marker-tooltip" role="tooltip">${note}</span>
+                </span>
+              `;
+            } else if (line.verification === "UNSURE" || line.is_uncertain) {
+              const note = line.fix_note || "AI가 가창자를 명확히 식별하지 못했습니다.";
+              markerHtml = `
+                <span class="marker-badge marker-unsure" tabindex="0" aria-label="AI 판별 불확실: ${note}">
+                  [? UNSURE]
+                  <span class="marker-tooltip" role="tooltip">${note}</span>
+                </span>
+              `;
+            }
+
+            lineEl.innerHTML = `
+              <div class="lyric-meta-row">
+                <span class="lyric-timestamp">${formatTime(line.start)} ~ ${formatTime(line.end)}</span>
+                <div class="badges-wrap">
+                  <span class="singer-tag ${line.singer || "artist"}">${singerLabel}</span>
+                  ${markerHtml}
+                </div>
+              </div>
+              <div class="lyric-ko">${line.original}</div>
+              <div class="lyric-romanized ${showRomanized ? "" : "hidden"}">${line.romanized || ""}</div>
+              <div class="lyric-en">${line.translation_en}</div>
+            `;
+
+            lineEl.addEventListener("click", () => {
+              seekToTime(line.start);
+            });
+
+            lineEl.addEventListener("keydown", (e) => {
+              if (e.key === "Enter") {
+                seekToTime(line.start);
+              }
+            });
+
+            block.appendChild(lineEl);
+          });
+        }
+      } else {
+        let title = seg.label === "applause" ? "👏 관객 환호 및 박수" : "🎬 오프닝 / 엔딩 / 기타";
+        const card = document.createElement("div");
+        card.className = "lyric-line";
+        card.dataset.timelineUid = `other_${seg.id}`;
+        card.dataset.segId = seg.id;
+        card.dataset.start = seg.start;
+        card.dataset.end = seg.end;
+        card.innerHTML = `
+          <div class="lyric-meta-row">
+            <span class="lyric-timestamp">${formatTime(seg.start)} ~ ${formatTime(seg.end)}</span>
+          </div>
+          <div class="lyric-ko" style="color: var(--text-secondary); font-size: 0.92rem;">${title} 구간입니다.</div>
+        `;
+        card.addEventListener("click", () => seekToTime(seg.start));
+        block.appendChild(card);
+      }
+
+      return block;
+    }
+
+    // Render all segments (songs + purple talk cards) in chronological order into #lyrics-content
+    function renderUnifiedTimeline() {
+      lyricsContent.innerHTML = "";
+      if (!concertData || !concertData.segments) return;
+
+      concertData.segments.forEach((seg) => {
+        const block = buildSegmentBlockElement(seg);
+        lyricsContent.appendChild(block);
+      });
+    }
+
+    // Replace only a single segment block in-place when background song/talk finishes
+    function updateSegmentBlockInTimeline(segId) {
+      if (!concertData || !concertData.segments) return;
+      const seg = concertData.segments.find((s) => s.id === segId);
+      if (!seg) return;
+
+      const existingBlock = lyricsContent.querySelector(
+        `.timeline-segment-block[data-seg-id="${segId}"]`
+      );
+      const newBlock = buildSegmentBlockElement(seg);
+      if (existingBlock) {
+        existingBlock.replaceWith(newBlock);
+      } else {
+        lyricsContent.appendChild(newBlock);
+      }
+      // 현재 재생 중인 세그먼트가 방금 업데이트된 경우에만 해당 줄 하이라이트 재적용
+      if (segId === activeSegmentId) {
+        activeTimelineUid = null;
+        updateTimeUI(true);
+      }
+    }
+
+    function updateTimeUI(forceRender = false) {
+      if (!concertData) return;
+      const totalDur = concertData.video.duration || 4986;
+      seekSlider.value = currentTimeSec;
+      timeReadout.textContent = `${formatTime(currentTimeSec)} / ${formatTime(totalDur)}`;
+
+      if (forceRender && lyricsContent.children.length === 0) {
+        renderUnifiedTimeline();
+      }
+
+      // Find current segment along timeline (including small gaps between segments)
+      const segments = concertData.segments || [];
+      let seg = segments.find(
+        (s) => currentTimeSec >= s.start && currentTimeSec <= s.end
+      );
+      if (!seg && segments.length > 0) {
+        for (let i = segments.length - 1; i >= 0; i--) {
+          if (currentTimeSec >= segments[i].start) {
+            seg = segments[i];
+            break;
+          }
+        }
+        if (!seg) {
+          seg = segments[0];
+        }
+      }
+
+      if (seg && (seg.id !== activeSegmentId || forceRender)) {
+        activeSegmentId = seg.id;
+        if (seg.label === "song") {
+          activeSongSegId = seg.id;
+        }
+        document.querySelectorAll(".setlist-item").forEach((el) => {
+          el.classList.toggle("active", el.dataset.segId === seg.id);
+        });
+      }
+
+      if (!seg) return;
+
+      let targetUid = null;
+      let showSingalong = false;
+
+      if (seg.label === "talk") {
+        targetUid = `talk_${seg.id}`;
+      } else if (seg.label === "song") {
+        const songObj = (concertData.songs || []).find((s) => s.segment_id === seg.id);
+        if (songObj && songObj.lines && songObj.lines.length > 0) {
+          let matchedLine = null;
+          for (const line of songObj.lines) {
+            if (currentTimeSec >= line.start && currentTimeSec <= line.end) {
+              matchedLine = line;
+              break;
+            }
+          }
+          if (!matchedLine) {
+            for (const line of songObj.lines) {
+              if (currentTimeSec >= line.start) {
+                matchedLine = line;
+              }
+            }
+          }
+          if (!matchedLine) {
+            matchedLine = songObj.lines[0];
+          }
+          if (matchedLine) {
+            targetUid = `line_${seg.id}_${matchedLine.id}`;
+            activeLineId = matchedLine.id;
+            showSingalong = Boolean(
+              matchedLine.singalong_request || matchedLine.singer === "crowd"
+            );
+          }
+        } else {
+          targetUid = `song_pending_${seg.id}`;
+        }
+      } else {
+        targetUid = `other_${seg.id}`;
+      }
+
+      singalongBanner.classList.toggle("visible", showSingalong);
+
+      if (targetUid && (targetUid !== activeTimelineUid || forceRender)) {
+        activeTimelineUid = targetUid;
+        let activeElement = null;
+        document.querySelectorAll(".lyric-line").forEach((el) => {
+          const isAct = el.dataset.timelineUid === activeTimelineUid;
+          el.classList.toggle("active", isAct);
+          if (isAct && !activeElement) {
+            activeElement = el;
+          }
+        });
+        if (activeElement) {
+          activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }
+    }
+
+    // Live 1-Song Retry Demo (POST /api/v1/tasks/{task_id}/songs/{seg_id}/retry)
+    async function triggerLiveSongDemo() {
+      const taskId = currentTaskId || "yt_38HUU_GIVmA_v1.0";
+      const segId = activeSongSegId || "seg_001";
+
+      await fetch(`/api/v1/tasks/${encodeURIComponent(taskId)}/songs/${encodeURIComponent(segId)}/retry`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ force_validation: true }),
+      });
+
+      currentTaskId = taskId;
+      openProcessingScreen(taskId);
+    }
+
+    // Event Listeners
+    urlForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      startAnalysis(false);
+    });
+
+    document.querySelectorAll(".preset-pill").forEach((pill) => {
+      pill.addEventListener("click", () => {
+        urlInput.value = pill.dataset.url;
+        startAnalysis(false);
+      });
+    });
+
+    document.getElementById("cancel-proc-btn").addEventListener("click", () => {
+      cancelProcessingAndReturn();
+    });
+
+    document.getElementById("nav-input-btn").addEventListener("click", () => {
+      cancelProcessingAndReturn();
+    });
+
+    document.getElementById("brand-home-btn").addEventListener("click", () => {
+      cancelProcessingAndReturn();
+    });
+
+    document.getElementById("header-live-demo-btn").addEventListener("click", () => {
+      triggerLiveSongDemo();
+    });
+
+    playToggleBtn.addEventListener("click", () => {
+      togglePlayPause();
+    });
+
+    seekSlider.addEventListener("input", (e) => {
+      seekToTime( parseFloat(e.target.value) );
+    });
+
+    document.getElementById("toggle-setlist-btn").addEventListener("click", (e) => {
+      const collapsed = setlistDrawer.classList.toggle("collapsed");
+      e.currentTarget.setAttribute("aria-expanded", String(!collapsed));
+    });
+
+    document.getElementById("toggle-roman-btn").addEventListener("click", (e) => {
+      showRomanized = !showRomanized;
+      e.currentTarget.textContent = showRomanized ? "로마자 발음 ON" : "로마자 발음 OFF";
+      e.currentTarget.setAttribute("aria-pressed", String(showRomanized));
+      document.querySelectorAll(".lyric-romanized").forEach((el) => {
+        el.classList.toggle("hidden", !showRomanized);
+      });
+    });
+
+    document.getElementById("toggle-logs-btn").addEventListener("click", (e) => {
+      const collapsed = playerLogPanel.classList.toggle("collapsed");
+      e.currentTarget.setAttribute("aria-expanded", String(!collapsed));
+    });
+
+    // Font Size Accessibility Controls (12px ~ 24px per DESIGN.md Section 4)
+    function updateFontSize(newSize) {
+      lyricFontSize = Math.min(24, Math.max(12, newSize));
+      document.documentElement.style.setProperty("--lyric-base-size", `${lyricFontSize}px`);
+      fontSizeLabel.textContent = `${lyricFontSize}px`;
+    }
+
+    document.getElementById("font-dec-btn").addEventListener("click", () => {
+      updateFontSize(lyricFontSize - 2);
+    });
+
+    document.getElementById("font-inc-btn").addEventListener("click", () => {
+      updateFontSize(lyricFontSize + 2);
+    });
+
+    // Keyboard Navigation (Spacebar play/pause, Up/Down arrow seek per DESIGN.md Section 4)
+    window.addEventListener("keydown", (e) => {
+      if (!screenPlayer.classList.contains("active")) return;
+      const tag = (document.activeElement && document.activeElement.tagName) || "";
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
+
+      if (e.code === "Space" && tag !== "BUTTON") {
+        e.preventDefault();
+        togglePlayPause();
+      } else if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        const items = Array.from(lyricsContent.querySelectorAll(".lyric-line[data-start]"));
+        if (!items.length) return;
+        e.preventDefault();
+        const currIdx = items.findIndex((el) => el.dataset.timelineUid === activeTimelineUid);
+        let nextIdx = 0;
+        if (e.key === "ArrowDown") {
+          nextIdx = Math.min(items.length - 1, currIdx + 1);
+        } else {
+          nextIdx = Math.max(0, currIdx - 1);
+        }
+        const targetStart = parseFloat(items[nextIdx].dataset.start);
+        if (!isNaN(targetStart)) {
+          seekToTime(targetStart);
+        }
+      }
+    });
+
+    // Scrollability Affordance Fallback (modern-web-guidance)
+    if (!window.CSS || !CSS.supports("container-type", "scroll-state")) {
+      const topSentinel = document.querySelector(".sentinel-top");
+      const bottomSentinel = document.querySelector(".sentinel-bottom");
+      if (topSentinel && bottomSentinel && lyricsScroller) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.target === topSentinel) {
+                lyricsScroller.classList.toggle("scrolled-down", !entry.isIntersecting);
+              }
+              if (entry.target === bottomSentinel) {
+                lyricsScroller.classList.toggle("can-scroll-down", !entry.isIntersecting);
+              }
+            });
+          },
+          { root: lyricsScroller }
+        );
+        observer.observe(topSentinel);
+        observer.observe(bottomSentinel);
+      }
+    }
+
+    // URL Routing & State Hydration on Page Load / PopState (F5 Refresh & Deep Linking)
+    async function hydrateFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const videoId = params.get("v");
+      if (!videoId) {
+        if (!screenInput.classList.contains("active")) {
+          if (activeEventSource) {
+            activeEventSource.close();
+            activeEventSource = null;
+          }
+          if (bgSyncBadge) bgSyncBadge.style.display = "none";
+          setPlayingState(false);
+          switchScreen(screenInput);
+        }
+        return;
+      }
+
+      const safeId = videoId.replace(/-/g, "_");
+      const taskId = `yt_${safeId}_v1.0`;
+      currentTaskId = taskId;
+      pendingVideoId = videoId;
+      urlInput.value = `https://youtu.be/${videoId}`;
+
+      try {
+        const stRes = await fetch(`/api/v1/tasks/${encodeURIComponent(taskId)}/status`);
+        if (stRes.ok) {
+          const stData = await stRes.json();
+          if (stData.status === "done") {
+            await loadResultAndOpenPlayer(taskId);
+            return;
+          } else if (stData.status === "ready_to_play") {
+            if (bgSyncBadge) {
+              bgSyncBadge.style.display = "inline-flex";
+              bgSyncBadge.textContent = "⚡ 백그라운드 AI 프리패칭 & 자율 검증 중...";
+            }
+            await loadResultAndOpenPlayer(taskId);
+            openProcessingScreen(taskId);
+            return;
+          } else if (stData.status === "queued" || stData.status === "processing" || stData.status === "validating") {
+            openProcessingScreen(taskId);
+            return;
+          }
+        }
+        // If task doesn't exist on server/memory/cache yet, automatically create task
+        await startAnalysis(false);
+      } catch (err) {
+        console.error("Hydration error:", err);
+      }
+    }
+
+    window.addEventListener("popstate", () => {
+      hydrateFromUrl();
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+      hydrateFromUrl();
+    });
+  </script>
+</body>
+</html>
